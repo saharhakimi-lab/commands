@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מאסטר Cisco Packet Tracer - סימולטור CLI מותאם</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght=300;400;600;800&family=Fira+Code:wght=400;500;700&display=swap');
+        
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #fdfbf7;
+            color: #7f1d1d;
+            overflow-x: hidden;
+        }
+
+        .terminal-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .crazy-avatar {
+            box-shadow: 0 0 15px #f59e0b, 0 0 30px #ef4444;
+        }
+
+        .tab-btn.active {
+            background-color: #991b1b;
+            color: #ffffff;
+            border-color: #b91c1c;
+            box-shadow: 0 4px 12px rgba(153, 27, 27, 0.3);
+        }
+
+        /* עיצוב המסוף - LTR קשיח */
+        .terminal-container {
+            direction: ltr !important;
+            text-align: left !important;
+        }
+
+        .terminal-screen {
+            background-color: #0c1017;
+            color: #38bdf8;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+            direction: ltr !important;
+            text-align: left !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+    <!-- כותרת ראשית -->
+    <header class="bg-red-900 text-amber-50 p-4 md:p-5 shadow-xl flex justify-between items-center relative z-20 border-b-4 border-amber-500">
+        <div class="flex items-center gap-4">
+            <div class="relative group">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-amber-400 overflow-hidden bg-slate-950 crazy-avatar animate-pulse flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                    <img src="https://lh3.googleusercontent.com/d/1BHxytxfATgrv3wpk_8slqpRX08p2Dzml" alt="Grand Master Avatar" class="w-full h-full object-cover">
+                </div>
+                <span class="absolute -bottom-1 -right-1 bg-amber-400 text-slate-950 text-[10px] font-black px-1.5 py-0.5 rounded-full uppercase border border-red-900 shadow">GRAND MASTER</span>
+            </div>
+            
+            <div>
+                <h1 class="text-xl md:text-2xl font-black flex items-center gap-2">
+                    מאסטר Cisco Packet Tracer - הדרכה אינטראקטיבית
+                </h1>
+                <p class="text-xs md:text-sm text-red-200 mt-0.5">סימולטור CLI חי - הקלד פקודות בדיוק כמו בטרמינל האמיתי</p>
+            </div>
+        </div>
+
+        <div class="text-left font-bold text-amber-300 bg-red-950/60 px-4 py-2 rounded-xl border border-red-800 shadow-inner">
+            <div class="text-xs text-red-300">התקדמות במסלול</div>
+            משימה <span id="level-display" class="text-lg text-amber-400">1</span> / <span id="total-levels">15</span>
+        </div>
+    </header>
+
+    <!-- סרגל טאבים -->
+    <nav class="bg-red-950 p-3 shadow-md border-b border-red-800">
+        <div class="max-w-7xl mx-auto flex flex-wrap gap-2 justify-center" id="tabs-container">
+            <button onclick="switchTab(0)" class="tab-btn active px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">1. מצבי ריצה ובסיס</button>
+            <button onclick="switchTab(1)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">2. הגדרת מחשב קצה</button>
+            <button onclick="switchTab(2)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">3. אבטחת Switch & SVI</button>
+            <button onclick="switchTab(3)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">4. הנתב וניתובי L3</button>
+            <button onclick="switchTab(4)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">5. VLAN, Trunk & NAT/ACL</button>
+        </div>
+    </nav>
+
+    <main class="flex-grow p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto w-full relative z-10">
+        
+        <!-- עמודה ימנית: תיאור המשימה, Syntax ומטרת הפקודה -->
+        <div class="flex flex-col gap-5">
+            
+            <!-- תיאור המשימה הפעילה -->
+            <div class="bg-white rounded-xl p-5 shadow border border-red-200">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-lg font-bold text-red-800 flex items-center gap-2">
+                        <i data-lucide="target" class="w-5 h-5 text-red-600"></i>
+                        משימה נוכחית
+                    </h2>
+                    <span id="tab-badge" class="bg-amber-100 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-full border border-amber-300">פרק 1</span>
+                </div>
+                <p id="mission-text" class="text-base md:text-lg leading-relaxed text-slate-900 font-semibold">
+                    טוען משימה...
+                </p>
+            </div>
+
+            <!-- חלונית 1: Syntax של הפקודה -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-xl p-5 shadow-lg border-2 border-amber-500/50 relative overflow-hidden">
+                <div class="absolute top-0 left-0 bg-amber-500 text-slate-950 text-[10px] font-black px-3 py-0.5 rounded-br-lg uppercase tracking-wider">COMMAND SYNTAX</div>
+                <h3 class="text-sm font-bold text-amber-400 mb-3 flex items-center gap-2 mt-1">
+                    <i data-lucide="code-2" class="w-4 h-4"></i> המבנה הנדרש לפקודה (Syntax)
+                </h3>
+                <div class="bg-slate-900/90 p-3 rounded-lg border border-slate-800 font-mono text-amber-300 text-sm md:text-base terminal-container" id="syntax-display">
+                    loading...
+                </div>
+            </div>
+
+            <!-- חלונית 2: הסבר ומטרת הפקודה -->
+            <div class="bg-white rounded-xl p-5 shadow border-2 border-red-300 relative overflow-hidden flex-grow flex flex-col justify-between">
+                <div>
+                    <h3 class="text-base font-bold text-red-900 mb-2 flex items-center gap-2">
+                        <i data-lucide="compass" class="w-5 h-5 text-red-700"></i> מטרת הפקודה והסבר תיאורטי
+                    </h3>
+                    <p id="purpose-display" class="text-slate-800 text-sm md:text-base leading-relaxed font-medium">
+                        טוען הסבר...
+                    </p>
+                </div>
+
+                <!-- דגש פדגוגי בסיום -->
+                <div id="reflection-box" class="mt-4 p-3 bg-green-50 border border-green-300 rounded-lg hidden">
+                    <span class="text-xs font-bold text-green-900 flex items-center gap-1 mb-1">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-600"></i> דגש פדגוגי:
+                    </span>
+                    <p id="reflection-text" class="text-xs text-green-800 italic"></p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- עמודה שמאלית: CLI חיוני ודינמי בול כמו פאקט טרייסר -->
+        <div class="flex flex-col gap-4">
+            
+            <div class="bg-slate-950 rounded-xl p-4 shadow-2xl border-2 border-slate-700 flex flex-col h-[520px] relative terminal-container">
+                
+                <!-- סרגל כותרת הטרמינל (LTR) -->
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-2 text-xs font-mono text-slate-400 w-full" dir="ltr">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                        <span class="text-slate-300 font-bold ml-2">Cisco IOS CLI - Packet Tracer</span>
+                    </div>
+                    <button onclick="resetTerminalConsole()" class="hover:text-red-400 transition-colors flex items-center gap-1 text-[11px] bg-slate-900 px-2 py-1 rounded border border-slate-800 cursor-pointer">
+                        <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Clear Screen
+                    </button>
+                </div>
+                
+                <!-- מסך הטרמינל האקטיבי (LTR בלבד) -->
+                <div id="terminal-screen" class="terminal-screen terminal-font p-4 rounded-lg flex-grow overflow-y-auto text-sm leading-relaxed tracking-wide whitespace-pre-wrap">
+                </div>
+
+                <!-- שורת קלט אינטראקטיבית מדויקת (LTR בלבד) -->
+                <div class="mt-3 bg-slate-900 border border-slate-800 rounded-lg p-2 flex items-center gap-2 w-full" dir="ltr">
+                    <span id="cli-prompt" class="terminal-font font-bold text-amber-400 text-sm whitespace-nowrap">Switch></span>
+                    <input type="text" id="cli-input" class="bg-transparent border-none outline-none text-slate-100 terminal-font text-sm flex-grow w-full" placeholder="Type command here..." autofocus autocomplete="off" spellcheck="false" dir="ltr">
+                    <button onclick="handleCommandSubmit()" class="bg-red-800 hover:bg-red-700 text-amber-100 font-bold px-4 py-1.5 rounded text-xs transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                        <span>Enter</span>
+                        <i data-lucide="corner-down-left" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- כפתור עזרה צף -->
+    <div class="fixed bottom-6 left-6 z-50 pointer-events-auto">
+        <button id="openHelpModalBtn" class="flex items-center gap-3 bg-gradient-to-r from-red-700 to-red-900 hover:from-red-800 hover:to-red-950 text-white font-bold py-2.5 px-5 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-105 border border-amber-400/40 cursor-pointer">
+            <div class="w-9 h-9 rounded-full border-2 border-amber-300 overflow-hidden bg-slate-950 flex-shrink-0 shadow">
+                <img src="https://lh3.googleusercontent.com/d/1BHxytxfATgrv3wpk_8slqpRX08p2Dzml" alt="Help Avatar" class="w-full h-full object-cover">
+            </div>
+            <span>בוט עזרה אישי</span>
+        </button>
+    </div>
+
+    <!-- Modal עזרה צף -->
+    <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4 transition-all duration-300 pointer-events-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full text-center relative shadow-2xl transform scale-95 transition-transform duration-300" id="helpModalContent">
+            <button id="closeHelpModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-slate-800 cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-amber-400 p-1 bg-slate-950 shadow-lg overflow-hidden crazy-avatar">
+                <img src="https://lh3.googleusercontent.com/d/1BHxytxfATgrv3wpk_8slqpRX08p2Dzml" alt="Help Avatar" class="w-full h-full object-cover rounded-full">
+            </div>
+
+            <h3 class="text-lg font-black text-white mb-2">צריך עזרה בפקודות Cisco?</h3>
+            <p class="text-sm text-slate-400 mb-6 leading-relaxed">הבוט האישי שלך מוכן להסביר ולהדריך אותך בכל פקודה!</p>
+            
+            <a href="https://gemini.google.com/gem/167016ac4a4b/66c3b83daa7940ef?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3 px-4 rounded-xl transition-all duration-200 shadow-lg cursor-pointer">
+                <span>פתח שיחה עם הבוט</span>
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const tasks = [
+            // טאב 1
+            { 
+                tab: 0, tabName: "1. מצבי ריצה ובסיס", 
+                mission: "היכנס ממצב משתמש (User EXEC) למצב ניהול מורחב (Privileged EXEC Mode).", 
+                syntax: "enable",
+                purpose: "מצב משתמש ראשוני (>) מאפשר לצפות בנתונים בסיסיים בלבד. כדי לבצע בדיקות עומק, להריץ פקודות show מתקדמות או לעבור להגדרות, חובה להיכנס למצב Privileged המאופיין בסמלית #.",
+                expectedPrompt: "Switch>",
+                nextPrompt: "Switch#",
+                expectedCmd: "enable",
+                reflection: "מעולה! כעת אתה במצב Privileged (#). מפה יש לך גישה לכל בדיקות המערכת." 
+            },
+            { 
+                tab: 0, tabName: "1. מצבי ריצה ובסיס", 
+                mission: "עבור ממצב Privileged EXEC Mode למצב הגדרות גלובליות (Global Configuration Mode).", 
+                syntax: "configure terminal",
+                purpose: "במצב Privileged לא ניתן לשנות את הגדרות המכשיר, אלא רק לצפות בהן. הפקודה configure terminal מעבירה אותך למצב הגדרות גלובלי (config)# שבו מתבצעים השינויים ברמת הרכיב.",
+                expectedPrompt: "Switch#",
+                nextPrompt: "Switch(config)#",
+                expectedCmd: "configure terminal",
+                reflection: "מצוין! שים לב שהפרומפט השתנה ל-(config)#. כעת אתה בעמדת הגדרת הפרמטרים." 
+            },
+            
+            // טאב 2
+            { 
+                tab: 1, tabName: "2. הגדרת מחשב קצה", 
+                mission: "במחשב PC0, הגדר כתובת IP וסאבנט: 192.168.1.10 עם מסכה 255.255.255.0.", 
+                syntax: "ipconfig 192.168.1.10 255.255.255.0",
+                purpose: "כדי שמחשב יתקשר ברשת, הוא זקוק לכתובת IP ייחודית ולמסכת רשת (Subnet Mask) המגדירה אילו רכיבים נמצאים איתו באותה רשת מקומית (LAN).",
+                expectedPrompt: "C:\\>",
+                nextPrompt: "C:\\>",
+                expectedCmd: "ipconfig 192.168.1.10 255.255.255.0",
+                reflection: "המחשב קיבל זהות ברשת! כעת הוא מסוגל לדבר עם מכשירים אחרים באותו הסאבנט." 
+            },
+            { 
+                tab: 1, tabName: "2. הגדרת מחשב קצה", 
+                mission: "הגדר את שער ברירת המחדל (Default Gateway) לכתובת 192.168.1.1.", 
+                syntax: "ipconfig /gateway 192.168.1.1",
+                purpose: "שער ברירת המחדל הוא כתובת ממשק הנתב (Router) המקומי. מחשב משתמש בכתובת זו בכל פעם שהוא רוצה לשלוח מידע לרשת חיצונית/אינטרנט.",
+                expectedPrompt: "C:\\>",
+                nextPrompt: "C:\\>",
+                expectedCmd: "ipconfig /gateway 192.168.1.1",
+                reflection: "מעולה! עכשיו המחשב יודע לאן לשלוח חבילות המיועדות מחוץ לרשת המקומית." 
+            },
+
+            // טאב 3
+            { 
+                tab: 2, tabName: "3. אבטחת Switch & SVI", 
+                mission: "שנה את שם המתג (Switch) ל-SW-Core.", 
+                syntax: "hostname SW-Core",
+                purpose: "מתן שם ייחודי לכל מתג ונתב ברשת הוא תנאי סף לניהול תקין. השם מופיע בפרומפט המסוף ומונע טעויות אנוש של הגדרת הציוד הלא נכון.",
+                expectedPrompt: "Switch(config)#",
+                nextPrompt: "SW-Core(config)#",
+                expectedCmd: "hostname SW-Core",
+                reflection: "שים לב! שם המתג במסוף השתנה מיד ל-SW-Core(config)#." 
+            },
+            { 
+                tab: 2, tabName: "3. אבטחת Switch & SVI", 
+                mission: "הגדר סיסמת הגנה מוצפנת לכניסה למצב Privileged בשם cisco123.", 
+                syntax: "enable secret cisco123",
+                purpose: "הפקודה enable secret מגנה על מעבר ממצב משתמש למצב ניהול (#) בעזרת הצפנה חזקה (Hash), כדי שרק מנהלי רשת מורשים יוכלו לשנות הגדרות.",
+                expectedPrompt: "SW-Core(config)#",
+                nextPrompt: "SW-Core(config)#",
+                expectedCmd: "enable secret cisco123",
+                reflection: "אבטחה מעולה! כעת כל ניסיון להיכנס למצב enable ידרוש את הסיסמה." 
+            },
+            { 
+                tab: 2, tabName: "3. אבטחת Switch & SVI", 
+                mission: "הפעל הצפנה אוטומטית לכל הסיסמאות הקיימות בקובץ התצורה.", 
+                syntax: "service password-encryption",
+                purpose: "ברירת המחדל של חלק מהסיסמאות היא טקסט גלוי. רכיב זה מפעיל מנגנון הצפנה גלובלי שמצפין מיד כל סיסמה בקובץ ה-running-config.",
+                expectedPrompt: "SW-Core(config)#",
+                nextPrompt: "SW-Core(config)#",
+                expectedCmd: "service password-encryption",
+                reflection: "מצוין. כעת גם אם מישהו יביט במסך ב-show running-config הוא לא יראה סיסמאות גלויות." 
+            },
+            { 
+                tab: 2, tabName: "3. אבטחת Switch & SVI", 
+                mission: "הגדר באנר אזהרה בכניסה למכשיר המכיל את הטקסט #Authorized_Only#.", 
+                syntax: "banner motd #Authorized_Only#",
+                purpose: "Message of the Day (MOTD) מציג הודעת אזהרה משפטית לכל מי שמתחבר למכשיר עוד לפני שלב ההתחברות, ומזהיר מפני חדירה בלתי מורשית.",
+                expectedPrompt: "SW-Core(config)#",
+                nextPrompt: "SW-Core(config)#",
+                expectedCmd: "banner motd #Authorized_Only#",
+                reflection: "הבאנר הוגדר. כל מתחבר ב-SSH, Telnet או Console יראה את האזהרה." 
+            },
+            { 
+                tab: 2, tabName: "3. אבטחת Switch & SVI", 
+                mission: "היכנס לממשק Management (vlan 1), הגדר לו כתובת 192.168.1.2 255.255.255.0 והדלק אותו.", 
+                syntax: "interface vlan 1\nip address 192.168.1.2 255.255.255.0\nno shutdown",
+                purpose: "מתג Layer 2 אינו מנתב, אך כדי שנוכל לנהל אותו מרחוק (SVI - Switch Virtual Interface) יש להגדיר כתובת IP לממשק הווירטואלי שלו ולהפעיל אותו בעזרת no shutdown.",
+                expectedPrompt: "SW-Core(config)#",
+                nextPrompt: "SW-Core(config-if)#",
+                expectedCmd: "interface vlan 1",
+                reflection: "עברת למצב ממשק (config-if)#! כעת הפורט הווירטואלי מוכן להגדרות IP." 
+            },
+
+            // טאב 4
+            { 
+                tab: 3, tabName: "4. הנתב וניתובי L3", 
+                mission: "הגדר ניתוב סטטי לרשת 10.0.0.0/24 דרך כתובת הנתב הבא 192.168.1.1.", 
+                syntax: "ip route 10.0.0.0 255.255.255.0 192.168.1.1",
+                purpose: "ניתוב סטטי משמש לחיבור יזום וידני לרשת יעד מוגדרת. אנו מורים לנתב: 'כל חבילה המיועדת לרשת 10.0.0.0/24, שלח אל הכתובת 192.168.1.1'.",
+                expectedPrompt: "Router(config)#",
+                nextPrompt: "Router(config)#",
+                expectedCmd: "ip route 10.0.0.0 255.255.255.0 192.168.1.1",
+                reflection: "הניתוב המוצלח נרשם בטבלת הניתובים (Routing Table) של הנתב!" 
+            },
+            { 
+                tab: 3, tabName: "4. הנתב וניתובי L3", 
+                mission: "הגדר ניתוב ברירת מחדל (Default Route) לכל יעד לא מוכר דרך 200.100.10.1.", 
+                syntax: "ip route 0.0.0.0 0.0.0.0 200.100.10.1",
+                purpose: "ניתוב ברירת מחדל (0.0.0.0 0.0.0.0) אומר לנתב: 'כל מידע המיועד לכתובת שאינה קיימת בטבלת הניתובים שלך, תעביר החוצה דרך כתובת הספק/אינטרנט'.",
+                expectedPrompt: "Router(config)#",
+                nextPrompt: "Router(config)#",
+                expectedCmd: "ip route 0.0.0.0 0.0.0.0 200.100.10.1",
+                reflection: "מעולה! הנתב מוכן כעת להעביר תעבורת אינטרנט כללית." 
+            },
+            { 
+                tab: 3, tabName: "4. הנתב וניתובי L3", 
+                mission: "הפעל פרוטוקול ניתוב דינמי OSPF process 1 והכרז על רשת 192.168.1.0/24 באזור 0.", 
+                syntax: "router ospf 1\nnetwork 192.168.1.0 0.0.0.255 area 0",
+                purpose: "OSPF הוא פרוטוקול ניתוב דינמי המחשב בעצמו נתיבים מהירים. שים לב שב-OSPF משתמשים במסכת הפוכה (Wildcard Mask: 0.0.0.255 במקום 255.255.255.0).",
+                expectedPrompt: "Router(config)#",
+                nextPrompt: "Router(config-router)#",
+                expectedCmd: "router ospf 1",
+                reflection: "נכנסת למצב הגדרות פרוטוקול OSPF: (config-router)#!" 
+            },
+
+            // טאב 5
+            { 
+                tab: 4, tabName: "5. VLAN, Trunk & NAT/ACL", 
+                mission: "צור VLAN חדש שמספרו 10 והענק לו את השם HR.", 
+                syntax: "vlan 10\nname HR",
+                purpose: "חוק ההפרדה הלוגית: VLAN מחלק מתג פיזי אחד למספר מתגים וירטואליים נפרדים, מה שמשפר את האבטחה ומפחית עומסי שידור (Broadcast).",
+                expectedPrompt: "SW-Core(config)#",
+                nextPrompt: "SW-Core(config-vlan)#",
+                expectedCmd: "vlan 10",
+                reflection: "נוצר VLAN 10! עברת למצב הגדרת VLAN: (config-vlan)#." 
+            },
+            { 
+                tab: 4, tabName: "5. VLAN, Trunk & NAT/ACL", 
+                mission: "הגדר את הממשק GigabitEthernet0/1 כמיועד לקישור Trunk.", 
+                syntax: "interface GigabitEthernet0/1\nswitchport mode trunk",
+                purpose: "פורט במצב Trunk מסוגל להעביר תעבורה של עשרות VLANs שונים בין מתגים בעזרת תיוג פריים (802.1Q Header).",
+                expectedPrompt: "SW-Core(config)#",
+                nextPrompt: "SW-Core(config-if)#",
+                expectedCmd: "interface GigabitEthernet0/1",
+                reflection: "עברת להגדרת ממשק תקשורת פיזי (config-if)#." 
+            },
+            { 
+                tab: 4, tabName: "5. VLAN, Trunk & NAT/ACL", 
+                mission: "הגדר תת-ממשק לוגי בנתב (Router-on-a-Stick) עבור VLAN 10 בתגיווג dot1Q.", 
+                syntax: "interface GigabitEthernet0/0.10\nencapsulation dot1Q 10",
+                purpose: "כדי לנתב בין VLANs שונים בעזרת פורט פיזי אחד בנתב, יוצרים תת-ממשק (Sub-interface) ומשייכים אותו ל-VLAN המתאים באמצעות אריזת dot1Q.",
+                expectedPrompt: "Router(config)#",
+                nextPrompt: "Router(config-subif)#",
+                expectedCmd: "interface GigabitEthernet0/0.10",
+                reflection: "עברת לתת-ממשק לוגי: (config-subif)#!" 
+            },
+            { 
+                tab: 4, tabName: "5. VLAN, Trunk & NAT/ACL", 
+                mission: "הגדר רשימת בקרת גישה (Standard ACL 1) המאפשרת תנועה מרשת 192.168.1.0/24 בלבד.", 
+                syntax: "access-list 1 permit 192.168.1.0 0.0.0.255",
+                purpose: "ACL משמשת כסינון תעבורה וכחומת אש. רשימה רגילה (Standard) בודקת את כתובת המקור בלבד ומשתמשת במסכת Wildcard לזיהוי טווח הרשת.",
+                expectedPrompt: "Router(config)#",
+                nextPrompt: "Router(config)#",
+                expectedCmd: "access-list 1 permit 192.168.1.0 0.0.0.255",
+                reflection: "רשימת הגישה נוצרה בהצלחה מוכנה לשיוך לממשק או ל-NAT!" 
+            }
+        ];
+
+        let currentTaskIdx = 0;
+        let activeTab = 0;
+        let activePrompt = "Switch>";
+
+        function switchTab(tabIdx) {
+            activeTab = tabIdx;
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === tabIdx);
+            });
+
+            const firstIdx = tasks.findIndex(t => t.tab === tabIdx);
+            if (firstIdx !== -1) {
+                currentTaskIdx = firstIdx;
+                initTask();
+            }
+        }
+
+        function initTask() {
+            const t = tasks[currentTaskIdx];
+            activePrompt = t.expectedPrompt;
+            
+            document.getElementById('level-display').innerText = currentTaskIdx + 1;
+            document.getElementById('total-levels').innerText = tasks.length;
+            document.getElementById('mission-text').innerText = t.mission;
+            document.getElementById('syntax-display').innerText = t.syntax;
+            document.getElementById('purpose-display').innerText = t.purpose;
+            document.getElementById('tab-badge').innerText = t.tabName;
+            document.getElementById('cli-prompt').innerText = activePrompt;
+
+            document.getElementById('reflection-box').classList.add('hidden');
+
+            // הודעות מסוף באנגלית נקייה ומסודרת (LTR בלבד)
+            appendToTerminal(`--- Starting Mission ${currentTaskIdx + 1} ---\nType the exact command to proceed.\n\n${activePrompt} `);
+            document.getElementById('cli-input').focus();
+        }
+
+        function appendToTerminal(text) {
+            const screen = document.getElementById('terminal-screen');
+            screen.innerText += text;
+            screen.scrollTop = screen.scrollHeight;
+        }
+
+        function handleCommandSubmit() {
+            const inputEl = document.getElementById('cli-input');
+            const typedCmd = inputEl.value.trim();
+            if (!typedCmd) return;
+
+            const t = tasks[currentTaskIdx];
+            
+            // הדפסת השורה שהתלמיד הקליד
+            appendToTerminal(`${typedCmd}\n`);
+            inputEl.value = '';
+
+            // בדיקת הפקודה
+            if (typedCmd.toLowerCase() === t.expectedCmd.toLowerCase()) {
+                // הצלחה
+                activePrompt = t.nextPrompt;
+                document.getElementById('cli-prompt').innerText = activePrompt;
+                
+                // הראית דגש פדגוגי
+                document.getElementById('reflection-text').innerText = t.reflection;
+                document.getElementById('reflection-box').classList.remove('hidden');
+
+                appendToTerminal(`% Command accepted.\n\n${activePrompt} `);
+
+                setTimeout(() => {
+                    if (currentTaskIdx < tasks.length - 1) {
+                        currentTaskIdx++;
+                        if (tasks[currentTaskIdx].tab !== activeTab) {
+                            switchTab(tasks[currentTaskIdx].tab);
+                        } else {
+                            initTask();
+                        }
+                    } else {
+                        appendToTerminal(`\n***************************************************\n CONGRATULATIONS! ALL LABS COMPLETED! \n***************************************************\n`);
+                    }
+                }, 2000);
+
+            } else {
+                // שגיאת Cisco אופיינית
+                appendToTerminal(`% Invalid input detected at '^' marker.\n\n${activePrompt} `);
+            }
+        }
+
+        function resetTerminalConsole() {
+            document.getElementById('terminal-screen').innerText = '';
+            initTask();
+        }
+
+        // האזנה למקש Enter
+        document.getElementById('cli-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                handleCommandSubmit();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            // Modal עזרה
+            const modal = document.getElementById('helpModal');
+            const modalContent = document.getElementById('helpModalContent');
+            const openBtn = document.getElementById('openHelpModalBtn');
+            const closeBtn = document.getElementById('closeHelpModalBtn');
+
+            openBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                setTimeout(() => modalContent.classList.remove('scale-95'), 10);
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modalContent.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 150);
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modalContent.classList.add('scale-95');
+                    setTimeout(() => modal.classList.add('hidden'), 150);
+                }
+            });
+
+            initTask();
+        });
+    </script>
+</body>
+</html>
