@@ -18,10 +18,17 @@
 
         .terminal-font {
             font-family: 'Fira Code', monospace;
+            direction: ltr;
+            display: inline-block;
         }
 
         .crazy-avatar {
             box-shadow: 0 0 15px #f59e0b, 0 0 30px #ef4444;
+        }
+
+        .tab-btn {
+            cursor: pointer;
+            user-select: none;
         }
 
         .tab-btn.active {
@@ -44,6 +51,17 @@
             direction: ltr !important;
             text-align: left !important;
         }
+
+        .eng-term {
+            direction: ltr;
+            unicode-bidi: embed;
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            color: #991b1b;
+            background-color: #fee2e2;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-12">
@@ -59,26 +77,26 @@
             
             <div>
                 <h1 class="text-xl md:text-2xl font-black flex items-center gap-2">
-                    מאסטר Cisco Packet Tracer - הדרכה אינטראקטיבית מתקדמת
+                    מאסטר <span class="eng-term text-amber-300 bg-red-950">Cisco Packet Tracer</span> - הדרכה אינטראקטיבית
                 </h1>
-                <p class="text-xs md:text-sm text-red-200 mt-0.5">סימולטור CLI מורחב - תרגול רצפים מלאים בדיוק כמו בבחינה</p>
+                <p class="text-xs md:text-sm text-red-200 mt-0.5">סימולטור <span dir="ltr" class="terminal-font">CLI</span> מורחב - תרגול רצפים מלאים בדיוק כמו בבחינה</p>
             </div>
         </div>
 
         <div class="text-left font-bold text-amber-300 bg-red-950/60 px-4 py-2 rounded-xl border border-red-800 shadow-inner">
             <div class="text-xs text-red-300">התקדמות במסלול</div>
-            משימה <span id="level-display" class="text-lg text-amber-400">1</span> / <span id="total-levels">12</span>
+            משימה <span id="level-display" class="text-lg text-amber-400">1</span> / <span id="total-levels">11</span>
         </div>
     </header>
 
     <!-- סרגל טאבים -->
     <nav class="bg-red-950 p-3 shadow-md border-b border-red-800">
         <div class="max-w-7xl mx-auto flex flex-wrap gap-2 justify-center" id="tabs-container">
-            <button onclick="switchTab(0)" class="tab-btn active px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">1. התחברות ותצורת בסיס</button>
-            <button onclick="switchTab(1)" class="tab-end px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all" onclick="switchTab(1)">2. אבטחת מתג וסיסמאות</button>
-            <button onclick="switchTab(2)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">3. ניהול ממשקים ו-SVI</button>
-            <button onclick="switchTab(3)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">4. VLANs ופורטים מתקדמים</button>
-            <button onclick="switchTab(4)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">5. ניתוב סטטי ודינמי</button>
+            <button onclick="switchTab(0)" class="tab-btn active px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">1. תצורת בסיס, באנר והצפנה</button>
+            <button onclick="switchTab(1)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">2. אבטחת קווים ו-Port Security</button>
+            <button onclick="switchTab(2)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">3. ממשק SVI ושער ברירת מחדל</button>
+            <button onclick="switchTab(3)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">4. VLANs, Access ו-Trunk</button>
+            <button onclick="switchTab(4)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">5. ניתוב סטטי ו-OSPF</button>
         </div>
     </nav>
 
@@ -118,9 +136,9 @@
                     <h3 class="text-base font-bold text-red-900 mb-2 flex items-center gap-2">
                         <i data-lucide="compass" class="w-5 h-5 text-red-700"></i> מטרת הרצף והסבר הנדסי
                     </h3>
-                    <p id="purpose-display" class="text-slate-800 text-sm md:text-base leading-relaxed font-medium">
+                    <div id="purpose-display" class="text-slate-800 text-sm md:text-base leading-relaxed font-medium">
                         טוען הסבר...
-                    </p>
+                    </div>
                 </div>
 
                 <!-- דגש פדגוגי בסיום -->
@@ -134,7 +152,7 @@
 
         </div>
 
-        <!-- עמודה שמאלית: CLI חיוני ודינמי בול כמו פאקט טרייסר -->
+        <!-- עמודה שמאלית: CLI דינמי -->
         <div class="flex flex-col gap-4">
             
             <div class="bg-slate-950 rounded-xl p-4 shadow-2xl border-2 border-slate-700 flex flex-col h-[520px] relative terminal-container">
@@ -156,7 +174,7 @@
                 <div id="terminal-screen" class="terminal-screen terminal-font p-4 rounded-lg flex-grow overflow-y-auto text-sm leading-relaxed tracking-wide whitespace-pre-wrap">
                 </div>
 
-                <!-- שורת קלט אינטראקטיבית מדויקת (LTR בלבד) -->
+                <!-- שורת קלט אינטראקטיבית (LTR בלבד) -->
                 <div class="mt-3 bg-slate-900 border border-slate-800 rounded-lg p-2 flex items-center gap-2 w-full" dir="ltr">
                     <span id="cli-prompt" class="terminal-font font-bold text-amber-400 text-sm whitespace-nowrap">Switch></span>
                     <input type="text" id="cli-input" class="bg-transparent border-none outline-none text-slate-100 terminal-font text-sm flex-grow w-full" placeholder="Type command here..." autofocus autocomplete="off" spellcheck="false" dir="ltr">
@@ -169,6 +187,40 @@
 
         </div>
     </main>
+
+    <!-- אזור מורה (חלק תחתון) -->
+    <section class="max-w-7xl mx-auto w-full px-4 md:px-6 mt-8">
+        <div class="bg-slate-900 border-2 border-amber-500/60 rounded-2xl p-6 shadow-2xl text-white">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-amber-500/20 border border-amber-500/40 rounded-xl text-amber-400">
+                        <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-amber-400">אזור מורה - פתרונות ורצפי פקודות</h2>
+                        <p class="text-xs text-slate-400">גישה בלעדית לסגל ההוראה לצפייה בתשובות הנכונות של כל הפרקים</p>
+                    </div>
+                </div>
+                
+                <button id="toggleTeacherBtn" onclick="promptTeacherAuth()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black px-6 py-2.5 rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                    <span>חשיפת תשובות למורה</span>
+                </button>
+            </div>
+
+            <!-- תוכן פתרונות -->
+            <div id="teacherContent" class="hidden mt-6 space-y-4">
+                <div class="p-4 bg-emerald-950/40 border border-emerald-500/40 rounded-xl text-emerald-300 text-sm flex items-center gap-2 mb-4">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+                    <span>אימות מורה בוצע בהצלחה! להלן כל תשובות הרצפים עבור הסימולטור:</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="answersContainer">
+                    <!-- מתמלא דינמית ב-JS -->
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- כפתור עזרה צף -->
     <div class="fixed bottom-6 left-6 z-50 pointer-events-auto">
@@ -191,7 +243,7 @@
                 <img src="https://lh3.googleusercontent.com/d/1BHxytxfATgrv3wpk_8slqpRX08p2Dzml" alt="Help Avatar" class="w-full h-full object-cover rounded-full">
             </div>
 
-            <h3 class="text-lg font-black text-white mb-2">צריך עזרה בפקודות Cisco?</h3>
+            <h3 class="text-lg font-black text-white mb-2">צריך עזרה בפקודות <span class="eng-term text-amber-300 bg-red-950">Cisco</span>?</h3>
             <p class="text-sm text-slate-400 mb-6 leading-relaxed">הבוט האישי שלך מוכן להסביר ולהדריך אותך בכל פקודה!</p>
             
             <a href="https://gemini.google.com/gem/167016ac4a4b/66c3b83daa7940ef?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3 px-4 rounded-xl transition-all duration-200 shadow-lg cursor-pointer">
@@ -202,136 +254,126 @@
     </div>
 
     <script>
-        /* מערך משימות מורחב ומורכב - כל משימה דורשת רצף של פקודות בסגנון עבודה אמיתי */
+        /* מערך משימות מעודכן לסנכרון 100% מלא בין המשימה, ה-Syntax ואזור המורה */
         const tasks = [
-            // פרק 1: התחברות ותצורת בסיס
+            // טאב 1: תצורת בסיס, באנר והצפנה
             { 
-                tab: 0, tabName: "1. התחברות ותצורת בסיס", 
-                mission: "בצע כניסה מלאה ממצב משתמש למצב הגדרות גלובליות ושנה את שם המתג ל-SW-Core דרך רצף פקודות נכון.", 
+                tab: 0, tabName: "1. תצורת בסיס, באנר והצפנה", 
+                mission: `התחבר למתג במצב הבסיסי, עלה דרגה למצב הרשאות מלאות, היכנס למצב תצורה גלובלית, ושנה את שם המתג מברירת המחדל ל-<span dir="ltr" class="eng-term">SW-Core</span> כדי שיזוהה בבירור ברשת.`, 
                 steps: ["enable", "configure terminal", "hostname SW-Core"],
                 syntax: "enable\nconfigure terminal\nhostname SW-Core",
-                purpose: "בעבודה אמיתית בטרמינל, מעבר בין מצבי הניהול הוא שלב הכרחי: מתחילים במצב User (>), עולים למצב Privileged (#) בעזרת enable, משם נכנסים לתצורת המערכת בעזרת configure terminal, ומגדירים שם ייחודי למכשיר.",
+                purpose: `מדרג ההרשאות ב-IOS: הפקודה <span dir="ltr" class="eng-term">enable</span> מעלה אותנו מ-<span dir="ltr" class="eng-term">User EXEC Mode</span> (סימן <span dir="ltr" class="eng-term">&gt;</span>, גישה לצפייה בלבד) ל-<span dir="ltr" class="eng-term">Privileged EXEC Mode</span> (סימן <span dir="ltr" class="eng-term">#</span>), שם מותרות פקודות ניהול ואבחון. משם, <span dir="ltr" class="eng-term">configure terminal</span> פותח את <span dir="ltr" class="eng-term">Global Configuration Mode</span> - הרמה שבה משנים את התצורה הכללית של המכשיר. הפקודה <span dir="ltr" class="eng-term">hostname</span> קובעת שם ייחודי למתג, מה שחיוני בסביבת ניהול עם ריבוי רכיבים: זה מה שמופיע בפרומפט, בלוגים ובכלי ניטור, ומונע בלבול בין מכשירים בזמן פתרון תקלות.`,
                 expectedPrompts: ["Switch>", "Switch#", "Switch(config)#"],
                 nextPrompt: "SW-Core(config)#",
-                reflection: "מצוין! ביצעת את המעבר המלא בין המצבים והגדרת את שם המתג بنجاح." 
+                reflection: "מעולה! המתג קיבל את שמו החדש." 
             },
             { 
-                tab: 0, tabName: "1. התחברות ותצורת בסיס", 
-                mission: "בצע בדיקת תצורה מלאה למערכת ושמור את הקובץ לזיכרון ה-NVRAM כדי שההגדרות לא יימחקו באתחול.", 
-                steps: ["end", "show running-config", "copy running-config startup-config"],
-                syntax: "end\nshow running-config\ncopy running-config startup-config",
-                purpose: "לאחר ביצוע שינויים, חובה לחזור למצב Privileged (בעזרת end), לוודא את תקינות ההגדרות בעזרת show running-config, ולשמור את קובץ ה-running החי אל תוך ה-startup-config הקבוע ב-NVRAM.",
-                expectedPrompts: ["SW-Core(config)#", "SW-Core#", "SW-Core#"],
-                nextPrompt: "SW-Core#",
-                reflection: "מעולה! התצורה נשמרה בזיכרון הלא-נדיף (Non-Volatile RAM) והמתג מוכן להפעלה מחדש." 
+                tab: 0, tabName: "1. תצורת בסיס, באנר והצפנה", 
+                mission: `בעודך במצב תצורה גלובלית, הגדר הודעת אזהרה לכל מי שמתחבר למתג באמצעות באנר יומי (<span dir="ltr" class="eng-term">MOTD</span>) עם התוחם <span dir="ltr" class="eng-term">#Authorized_Only#</span>, ולאחר מכן הפעל מנגנון להצפנת כל הסיסמאות המאוחסנות בקובץ התצורה.`, 
+                steps: ["banner motd #Authorized_Only#", "service password-encryption"],
+                syntax: "banner motd #Authorized_Only#\nservice password-encryption",
+                purpose: `אבטחה משפטית וטכנית משולבת: <span dir="ltr" class="eng-term">banner motd</span> (Message Of The Day) מציגה הודעה לכל משתמש עוד לפני שהתחבר בהצלחה - שימוש נפוץ הוא אזהרה משפטית "לשימוש מורשים בלבד" שמרתיעה גישה לא חוקית ומשמשת גיבוי משפטי במקרה תקיפה. שים לב שהתו התוחם (כאן <span dir="ltr" class="eng-term">#</span>) יכול להיות כל תו שלא מופיע בטקסט ההודעה עצמה. בנוסף, <span dir="ltr" class="eng-term">service password-encryption</span> הופכת סיסמאות מסוג <span dir="ltr" class="eng-term">Type 0</span> (טקסט גלוי בקובץ התצורה) לסיסמאות מוצפנות מסוג <span dir="ltr" class="eng-term">Type 7</span> - הצפנה חלשה יחסית אך מונעת קריאה מיידית "מעבר לכתף" של הסיסמה בעת הצגת קובץ ה-<span dir="ltr" class="eng-term">running-config</span>.`,
+                expectedPrompts: ["SW-Core(config)#", "SW-Core(config)#"],
+                nextPrompt: "SW-Core(config)#",
+                reflection: "באנר האזהרה ומנגנון הצפנת הסיסמאות הופעלו בהצלחה!" 
             },
 
-            // פרק 2: אבטחת מתג וסיסמאות
+            // טאב 2: אבטחת קווים ו-Port Security
             { 
-                tab: 1, tabName: "2. אבטחת מתג וסיסמאות", 
-                mission: "הגדר סיסמת Enable מוצפנת (secret) בשם cisco123, הפעל הצפנת סיסמאות גלובלית, והגדר באנר אזהרה למתחברים #Authorized_Only#.", 
-                steps: ["configure terminal", "enable secret cisco123", "service password-encryption", "banner motd #Authorized_Only#"],
-                syntax: "configure terminal\nenable secret cisco123\nservice password-encryption\nbanner motd #Authorized_Only#",
-                purpose: "אבטחת התקני קצה דורשת שכבות הגנה מרובות: הצפנת סיסמת הניהול הבכירה באמצעות Hash (enable secret), הצפנת סיסמאות גלויות בזיכרון ה-running, והצגת אזהרה משפטית לכל מי שניגש למכשיר.",
-                expectedPrompts: ["SW-Core#", "SW-Core(config)#", "SW-Core(config)#", "SW-Core(config)#"],
+                tab: 1, tabName: "2. אבטחת קווים ו-Port Security", 
+                mission: `הגדר סיסמה מוצפנת לכניסה למצב הרשאות מלאות באמצעות <span dir="ltr" class="eng-term">enable secret cisco123</span>. לאחר מכן היכנס להגדרות קו הקונסולה (<span dir="ltr" class="eng-term">line con 0</span>), קבע את הסיסמה <span dir="ltr" class="eng-term">adminpass</span>, הפעל דרישת סיסמה בפועל עם <span dir="ltr" class="eng-term">login</span>, וצא בחזרה למצב תצורה גלובלית.`, 
+                steps: ["enable secret cisco123", "line con 0", "password adminpass", "login", "exit"],
+                syntax: "enable secret cisco123\nline con 0\npassword adminpass\nlogin\nexit",
+                purpose: `שכבות הגנה משלימות: <span dir="ltr" class="eng-term">enable secret</span> מוצפנת תמיד (אלגוריתם MD5), בניגוד ל-<span dir="ltr" class="eng-term">enable password</span> הישנה - וכאשר שתיהן מוגדרות, ה-IOS תמיד יעדיף את ה-<span dir="ltr" class="eng-term">secret</span>. הפקודה <span dir="ltr" class="eng-term">line con 0</span> נכנסת למצב תצורת קו (<span dir="ltr" class="eng-term">config-line</span>) עבור יציאת הקונסולה הפיזית - החיבור הראשוני שדרכו מגדירים מכשיר "מהיציאה" בלי צורך ברשת. חשוב להבין שהפקודה <span dir="ltr" class="eng-term">password</span> בלבד רק מגדירה סיסמה, ורק <span dir="ltr" class="eng-term">login</span> בפועל אוכפת את הדרישה להזין אותה - שכחת <span dir="ltr" class="eng-term">login</span> היא טעות נפוצה שמשאירה את הקו פתוח לגמרי.`,
+                expectedPrompts: ["SW-Core(config)#", "SW-Core(config)#", "SW-Core(config-line)#", "SW-Core(config-line)#", "SW-Core(config-line)#"],
                 nextPrompt: "SW-Core(config)#",
-                reflection: "אבטחה ברמה גבוהה! המתג כעת מוגן מפני חדירות לא מורשות וסיסמאות גלויות." 
+                reflection: "הסיסמאות וקו הקונסולה מאובטחים!" 
             },
             { 
-                tab: 1, tabName: "2. אבטחת מתג וסיסמאות", 
-                mission: "הגדר סיסמת גישה קונסולה (Console) עבור פורט הניהול הישיר, אפשר התחברות עם סיסמה, וחזור לתפריט הראשי.", 
-                steps: ["line con 0", "password adminpass", "login", "exit"],
-                syntax: "line con 0\npassword adminpass\nlogin\nexit",
-                purpose: "חיבור קונסולה פיזי (Console) הוא נקודת התורפה הראשונה של מתג. כדי למנוע גישה פיזית לא מורשית למכשיר, נכנסים להגדרות הקו (line con 0), מגדירים סיסמה ומפעילים את פקודת ה-login.",
-                expectedPrompts: ["SW-Core(config)#", "SW-Core(config-line)#", "SW-Core(config-line)#", "SW-Core(config)#"],
-                nextPrompt: "SW-Core(config)#",
-                reflection: "מעולה! פורט הקונסולה מוגן כעת בסיסמה קשיחה." 
+                tab: 1, tabName: "2. אבטחת קווים ו-Port Security", 
+                mission: `היכנס לממשק <span dir="ltr" class="eng-term">FastEthernet0/1</span>, הגדר אותו כפורט גישה קבוע (<span dir="ltr" class="eng-term">access</span>), הפעל את מנגנון <span dir="ltr" class="eng-term">port-security</span>, הגבל את מספר כתובות ה-MAC המורשות לפורט זה לכתובת אחת בלבד, וקבע שהלימוד של הכתובת ייעשה אוטומטית ויישמר בקובץ התצורה (<span dir="ltr" class="eng-term">sticky</span>).`, 
+                steps: ["interface FastEthernet0/1", "switchport mode access", "switchport port-security", "switchport port-security maximum 1", "switchport port-security mac-address sticky"],
+                syntax: "interface FastEthernet0/1\nswitchport mode access\nswitchport port-security\nswitchport port-security maximum 1\nswitchport port-security mac-address sticky",
+                purpose: `אבטחת פורטים (<span dir="ltr" class="eng-term">Port Security</span>) בשכבה 2: לפני שאפשר להפעיל את המנגנון חובה להגדיר את הפורט כ-<span dir="ltr" class="eng-term">access</span> - אבטחת פורטים אינה נתמכת על פורטי <span dir="ltr" class="eng-term">trunk</span> כברירת מחדל. הפקודה <span dir="ltr" class="eng-term">switchport port-security maximum 1</span> קובעת תקרה למספר הכתובות שהפורט "יזכור" בו-זמנית; חריגה ממנה (למשל חיבור מתג נוסף במקום מחשב בודד) תפעיל תגובת הפרה (ברירת מחדל: <span dir="ltr" class="eng-term">shutdown</span> - כיבוי הפורט). המילה <span dir="ltr" class="eng-term">sticky</span> אומרת למתג ללמוד את כתובת ה-MAC הראשונה שהוא רואה בפועל בתעבורה החיה ולהוסיף אותה אוטומטית לקובץ התצורה כאילו הוקלדה ידנית - שילוב שנותן גם נוחות (אין צורך לדעת מראש את הכתובת) וגם קביעות (היא נשמרת גם אחרי אתחול, כל עוד שומרים את התצורה).`,
+                expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#", "SW-Core(config-if)#", "SW-Core(config-if)#", "SW-Core(config-if)#"],
+                nextPrompt: "SW-Core(config-if)#",
+                reflection: "אבטחת הפורט (Port Security) הופעלה בצורה מושלמת!" 
             },
 
-            // פרק 3: ניהול ממשקים ו-SVI
+            // טאב 3: ממשק SVI ושער ברירת מחדל
             { 
-                tab: 2, tabName: "3. ניהול ממשקים ו-SVI", 
-                mission: "הכנס לממשק הניהול הווירטואלי (VLAN 1), הגדר לו כתובת IP 192.168.1.2 עם מסכה 255.255.255.0, והדלק אותו.", 
+                tab: 2, tabName: "3. ממשק SVI ושער ברירת מחדל", 
+                mission: `היכנס לממשק הווירטואלי <span dir="ltr" class="eng-term">interface vlan 1</span> (ממשק ה-<span dir="ltr" class="eng-term">SVI</span> של המתג), הגדר לו כתובת <span dir="ltr" class="eng-term">IP 192.168.1.2</span> עם מסכת רשת <span dir="ltr" class="eng-term">255.255.255.0</span>, ולבסוף הפעל את הממשק פיזית-לוגית עם <span dir="ltr" class="eng-term">no shutdown</span> כדי שיעבור למצב <span dir="ltr" class="eng-term">up/up</span>.`, 
                 steps: ["interface vlan 1", "ip address 192.168.1.2 255.255.255.0", "no shutdown"],
                 syntax: "interface vlan 1\nip address 192.168.1.2 255.255.255.0\nno shutdown",
-                purpose: "מתג Layer 2 פועל ברמת הכתובות הפיזיות (MAC), אך כדי שנוכל לנהל אותו מרחוק ברשת ה-IP, אנו חייבים להגדיר ממשק וירטואלי (SVI - Switch Virtual Interface) על גבי VLAN 1 ולהדליק אותו פיזית בעזרת no shutdown.",
+                purpose: `הגדרת SVI (<span dir="ltr" class="eng-term">Switch Virtual Interface</span>): מתג מסוג <span dir="ltr" class="eng-term">Layer 2</span> אינו זקוק לכתובת IP כדי להעביר תעבורה בין פורטים - אך כן זקוק לה כדי שמנהל הרשת יוכל לנהל אותו מרחוק (<span dir="ltr" class="eng-term">Telnet/SSH/Ping</span>). הפקודה <span dir="ltr" class="eng-term">interface vlan 1</span> נכנסת לממשק וירטואלי שאינו קיים פיזית אלא מייצג את ה-VLAN של הניהול. חשוב לזכור: בניגוד לפורטים פיזיים, ממשקי SVI נוצרים במצב <span dir="ltr" class="eng-term">shutdown</span> כברירת מחדל ברוב הדימויים, ולכן פקודת <span dir="ltr" class="eng-term">no shutdown</span> היא שלב קריטי שמתחילים רבים שוכחים - בלעדיה הממשק יישאר במצב <span dir="ltr" class="eng-term">administratively down</span> גם אם כל שאר ההגדרות תקינות.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
-                reflection: "מצוין! ממשק הניהול דלוק, מוכן לקבל פקודות Telnet/SSH מרחוק." 
+                reflection: "ממשק ה-SVI מוגדר ופעיל!" 
             },
             { 
-                tab: 2, tabName: "3. ניהול ממשקים ו-SVI", 
-                mission: "הגדר את שער ברירת המחדל של המתג לכתובת 192.168.1.1 כדי שיוכל לתקשר מחוץ לרשת המקומית.", 
-                steps: ["end", "configure terminal", "ip default-gateway 192.168.1.1"],
-                syntax: "end\nconfigure terminal\nip default-gateway 192.168.1.1",
-                purpose: "מתג Layer 2 שאינו מנתב זקוק להגדרת שער ברירת מחדל (Default Gateway) כדי שיוכל לשלוח חבילות ניהול לרשתות מרוחקות מעבר לסאבנט המקומי.",
-                expectedPrompts: ["SW-Core(config-if)#", "SW-Core#", "SW-Core(config)#"],
+                tab: 2, tabName: "3. ממשק SVI ושער ברירת מחדל", 
+                mission: `צא ממצב הגדרת הממשק בחזרה למצב תצורה גלובלית, ושם הגדר את שער ברירת המחדל של המתג (<span dir="ltr" class="eng-term">ip default-gateway</span>) לכתובת <span dir="ltr" class="eng-term">192.168.1.1</span> - כתובת הנתב שדרכו יוצאת תעבורת הניהול אל מחוץ לרשת המקומית.`, 
+                steps: ["exit", "ip default-gateway 192.168.1.1"],
+                syntax: "exit\nip default-gateway 192.168.1.1",
+                purpose: `הגדרת Default Gateway ברמת המתג: מתג Layer 2 אינו מבצע ניתוב בין רשתות - הוא רק "יודע" איך להגיע למכשירים בתוך רשת ה-VLAN המקומית שלו. כדי שהוא יוכל לתקשר עם תחנת ניהול שנמצאת ברשת אחרת (למשל מנהל שמתחבר מרחוק דרך אינטרנט או VPN), הוא צריך לדעת לאן לשלוח כל תעבורה שאינה מיועדת לרשת המקומית - זהו תפקידו של <span dir="ltr" class="eng-term">ip default-gateway</span>. שימו לב שזו פקודה גלובלית (ולא בתוך ממשק), ולכן חובה לצאת קודם מהגדרת ה-SVI עם <span dir="ltr" class="eng-term">exit</span>. פקודה זו רלוונטית רק במתגי Layer 2 טהורים; במתגי Layer 3 משתמשים בפקודת <span dir="ltr" class="eng-term">ip route</span> הרגילה במקום.`,
+                expectedPrompts: ["SW-Core(config-if)#", "SW-Core(config)#"],
                 nextPrompt: "SW-Core(config)#",
-                reflection: "שער הגישה הוגדר בהצלחה! למתג יש כעת כתובת שער לצאת החוצה." 
+                reflection: "שער ברירת המחדל הוגדר בהצלחה!" 
             },
 
-            // פרק 4: VLANs ופורטים מתקדמים
+            // טאב 4: VLANs, Access ו-Trunk
             { 
-                tab: 3, tabName: "4. VLANs ופורטים מתקדמים", 
-                mission: "צור VLAN 10 חדש ותן לו את השם HR, לאחר מכן צא למצב הגדרות מערכת.", 
+                tab: 3, tabName: "4. VLANs, Access ו-Trunk", 
+                mission: `צור רשת וירטואלית חדשה <span dir="ltr" class="eng-term">VLAN 10</span>, תן לה שם משמעותי - <span dir="ltr" class="eng-term">HR</span> - כדי שתזוהה בקלות בטבלת ה-VLANs, וצא חזרה למצב תצורה גלובלית.`, 
                 steps: ["vlan 10", "name HR", "exit"],
                 syntax: "vlan 10\nname HR\nexit",
-                purpose: "הפרדה לוגית לרשתות משנה (VLANs) מפחיתה את עומסי השידור (Broadcast Domains) ברשת ומבודדת מחלקות ארגוניות שונות על גבי אותה תשתית מתגים פיזית.",
+                purpose: `יצירת VLAN (<span dir="ltr" class="eng-term">Virtual Local Area Network</span>): הפקודה <span dir="ltr" class="eng-term">vlan 10</span> יוצרת רשת לוגית חדשה ונכנסת למצב תצורת VLAN ייעודי (<span dir="ltr" class="eng-term">config-vlan</span>). חלוקה לרשתות וירטואליות מאפשרת להפריד מחלקות שונות (למשל HR, IT, כספים) לתוך אותו מתג פיזי בלי שהן "רואות" זו את זו - כל VLAN הוא מתחם שידור (<span dir="ltr" class="eng-term">Broadcast Domain</span>) נפרד, מה שגם משפר ביצועים (פחות רעש רשת) וגם מגביר אבטחה (מחלקה אחת לא יכולה לצותת לתעבורה של מחלקה אחרת ללא ניתוב מפורש). הפקודה <span dir="ltr" class="eng-term">name</span> אינה חובה טכנית - המספר לבדו מספיק לתפקוד - אך היא קריטית לניהול תקין וברור, במיוחד ברשתות עם עשרות VLANs.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-vlan)#", "SW-Core(config-vlan)#"],
                 nextPrompt: "SW-Core(config)#",
-                reflection: "VLAN 10 נוצר בהצלחה והוגדר בשם HR." 
+                reflection: "VLAN 10 הוגדר בשם HR בהצלחה!" 
             },
             { 
-                tab: 3, tabName: "4. VLANs ופורטים מתקדמים", 
-                mission: "הגדר פורט פיזי FastEthernet0/1 כפורט גישה (Access) ושייך אותו ל-VLAN 10.", 
-                steps: ["interface FastEthernet0/1", "switchport mode access", "switchport access vlan 10"],
-                syntax: "interface FastEthernet0/1\nswitchport mode access\nswitchport access vlan 10",
-                purpose: "כדי לחבר מחשב קצה למחלקת ה-HR, יש להגדיר את הפורט כפורט גישה (Access Port) המיועד להתקן קצה יחיד, ולשייך אותו באופן קבוע למספר ה-VLAN שהוקצה לכך.",
+                tab: 3, tabName: "4. VLANs, Access ו-Trunk", 
+                mission: `היכנס לממשק <span dir="ltr" class="eng-term">FastEthernet0/2</span>, קבע אותו במפורש כפורט גישה למחשב קצה (<span dir="ltr" class="eng-term">Access</span>), ושייך אותו לרשת הווירטואלית <span dir="ltr" class="eng-term">VLAN 10</span> שיצרת קודם.`, 
+                steps: ["interface FastEthernet0/2", "switchport mode access", "switchport access vlan 10"],
+                syntax: "interface FastEthernet0/2\nswitchport mode access\nswitchport access vlan 10",
+                purpose: `שיוך פורט קצה ל-VLAN: פורט שמחובר ישירות למחשב, מדפסת או מצלמה (ולא למתג/נתב אחר) צריך להיות מוגדר כ-<span dir="ltr" class="eng-term">Access</span> - מצב שבו הפורט שייך ל-VLAN בודד ואינו מוסיף תגיות (<span dir="ltr" class="eng-term">tags</span>) לתעבורה, כי המכשיר בקצה לא יודע לפרש אותן. הפקודה <span dir="ltr" class="eng-term">switchport mode access</span> קובעת את סוג הפורט באופן מפורש (חשוב לציין זאת ולא לסמוך על ברירת המחדל, כדי למנוע פרצת אבטחה שנקראת <span dir="ltr" class="eng-term">VLAN Hopping</span>), ואילו <span dir="ltr" class="eng-term">switchport access vlan 10</span> מבצעת את השיוך בפועל - מרגע זה, כל מכשיר שיחובר לפורט הזה ייכנס אוטומטית לרשת הלוגית של HR ויקבל גישה רק למשאבים המשויכים ל-VLAN 10.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
-                reflection: "הפורט שוייך בהצלחה ל-VLAN הייעודי!" 
+                reflection: "הפורט שוייך בהצלחה ל-VLAN 10!" 
             },
             { 
-                tab: 3, tabName: "4. VLANs ופורטים מתקדמים", 
-                mission: "הגדר את פורט GigabitEthernet0/1 כממשק Trunk להעברת מגוון VLANs בין מתגים.", 
+                tab: 3, tabName: "4. VLANs, Access ו-Trunk", 
+                mission: `היכנס לממשק <span dir="ltr" class="eng-term">GigabitEthernet0/1</span>, המחובר למתג שכן נוסף, והגדר אותו כפורט מעבר עורקי (<span dir="ltr" class="eng-term">Trunk</span>) שמאפשר מעבר תעבורה של כמה VLANs יחד על גבי אותו קישור.`, 
                 steps: ["interface GigabitEthernet0/1", "switchport mode trunk"],
                 syntax: "interface GigabitEthernet0/1\nswitchport mode trunk",
-                purpose: "פורט Trunk משמש כעורק מרכזי בין מתגים או בין מתג לנתב. הוא מעביר תעבורה של מספר VLANs שונים על גבי כבל פיזי יחיד תוך שימוש בתיוג חבילות (802.1Q).",
+                purpose: `הגדרת Trunk ופרוטוקול 802.1Q: בניגוד לפורט Access שמשויך ל-VLAN בודד, פורט Trunk מיועד לקישורים שבין מתגים (או בין מתג לנתב/שרת וירטואליזציה), ועליו לשאת תעבורה השייכת למספר VLANs בו-זמנית על גבי כבל פיזי יחיד. כדי שהצד השני יידע לאיזה VLAN שייכת כל מסגרת, המתג "מתייג" (<span dir="ltr" class="eng-term">tags</span>) כל מסגרת בכותרת נוספת בתקן <span dir="ltr" class="eng-term">IEEE 802.1Q</span> לפני שליחתה על גבי ה-Trunk. בפועל, פקודת <span dir="ltr" class="eng-term">switchport mode trunk</span> היא זו שמפעילה את מנגנון התיוג הזה. חשוב לדעת: שני קצות הקישור חייבים להיות מוגדרים כ-Trunk (או להגיע להסכמה אוטומטית באמצעות DTP) אחרת התעבורה המתויגת תיפסל בצד השני.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
-                reflection: "עורק ה-Trunk הוגדר בהצלחה!" 
+                reflection: "פורט העורק (Trunk) הוגדר בהצלחה!" 
             },
 
-            // פרק 5: ניתוב סטטי ודינמי
+            // טאב 5: ניתוב סטטי ו-OSPF
             { 
-                tab: 4, tabName: "5. ניתוב סטטי ודינמי", 
-                mission: "הגדר בנתב ניתוב סטטי (Static Route) לרשת 10.0.0.0/24 דרך כתובת הנתב הבא 192.168.1.1.", 
-                steps: ["configure terminal", "ip route 10.0.0.0 255.255.255.0 192.168.1.1"],
-                syntax: "configure terminal\nip route 10.0.0.0 255.255.255.0 192.168.1.1",
-                purpose: "ניתוב סטטי דורש הגדרה ידנית של מנהל הרשת. אנו מורים לנתב באופן מפורש להיכן לשלוח חבילות המיועדות לרשת יעד מרוחקת בעזרת ציון כתובת הנתב השכן (Next-hop).",
-                expectedPrompts: ["Router#", "Router(config)#"],
+                tab: 4, tabName: "5. ניתוב סטטי ו-OSPF", 
+                mission: `עבור למכשיר הנתב (<span dir="ltr" class="eng-term">Router</span>), עלה למצב הרשאות מלאות והיכנס לתצורה גלובלית. הגדר נתיב סטטי מפורש לרשת <span dir="ltr" class="eng-term">10.0.0.0/24</span> דרך הנתב השכן בכתובת <span dir="ltr" class="eng-term">192.168.1.1</span>, ולאחר מכן הגדר נתיב ברירת מחדל (<span dir="ltr" class="eng-term">0.0.0.0 0.0.0.0</span>) שיפנה כל תעבורה לא מוכרת אל ה-ISP בכתובת <span dir="ltr" class="eng-term">200.100.10.1</span>.`, 
+                steps: ["enable", "configure terminal", "ip route 10.0.0.0 255.255.255.0 192.168.1.1", "ip route 0.0.0.0 0.0.0.0 200.100.10.1"],
+                syntax: "enable\nconfigure terminal\nip route 10.0.0.0 255.255.255.0 192.168.1.1\nip route 0.0.0.0 0.0.0.0 200.100.10.1",
+                purpose: `ניתוב סטטי (<span dir="ltr" class="eng-term">Static Routing</span>) וניתוב ברירת מחדל: פקודת <span dir="ltr" class="eng-term">ip route</span> מקבלת שלושה רכיבים - רשת היעד, מסכת הרשת שלה, וכתובת ה-<span dir="ltr" class="eng-term">Next Hop</span> (הנתב הבא בדרך). ניתוב סטטי מתאים לרשתות קטנות ויציבות כי הוא צורך אפס משאבי מעבד ומספק שליטה מלאה, אך אינו מגיב אוטומטית לשינויים ברשת. נתיב ברירת המחדל <span dir="ltr" class="eng-term">0.0.0.0 0.0.0.0</span> הוא מקרה פרטי מיוחד: הוא "תופס" כל כתובת יעד שאינה מופיעה בטבלת הניתוב באופן ספציפי יותר (ה-<span dir="ltr" class="eng-term">wildcard</span> הרחב ביותר האפשרי) ולכן משמש בדרך כלל כדי לשלוח את כל התעבורה שאינה פנימית אל ספק האינטרנט (<span dir="ltr" class="eng-term">ISP</span>) - שם ה-Cisco IOS מכנה אותה גם <span dir="ltr" class="eng-term">Gateway of Last Resort</span>.`,
+                expectedPrompts: ["Router>", "Router#", "Router(config)#", "Router(config)#"],
                 nextPrompt: "Router(config)#",
-                reflection: "הניתוב הסטטי נרשם בטבלת הניתובים של הנתב!" 
+                reflection: "הניתובים הסטטיים נרשמו בטבלת הניתובים!" 
             },
             { 
-                tab: 4, tabName: "5. ניתוב סטטי ודינמי", 
-                mission: "הגדר ניתוב ברירת מחדל (Default Route) לכל יעד לא ידוע דרך כתובת הספק 200.100.10.1.", 
-                steps: ["ip route 0.0.0.0 0.0.0.0 200.100.10.1"],
-                syntax: "ip route 0.0.0.0 0.0.0.0 200.100.10.1",
-                purpose: "ניתוב ברירת מחדל (0.0.0.0 0.0.0.0) משמש כרשת המילוט של הנתב לכל תעבורה שאינה מוכרת בטבלה, ובדרך כלל מוביל ישירות אל ספק האינטרנט (ISP).",
-                expectedPrompts: ["Router(config)#"],
-                nextPrompt: "Router(config)#",
-                reflection: "ברירת המחדל הוגדרה בהצלחה. הנתב מוכן לניתוב תעבורת אינטרנט רחבה." 
-            },
-            { 
-                tab: 4, tabName: "5. ניתוב סטטי ודינמי", 
-                mission: "הפעל פרוטוקול ניתוב דינמי OSPF process 1 והכרז על רשת הבית 192.168.1.0 במסכת Wildcard באזור 0.", 
+                tab: 4, tabName: "5. ניתוב סטטי ו-OSPF", 
+                mission: `הפעל תהליך ניתוב דינמי מסוג <span dir="ltr" class="eng-term">OSPF</span> עם מזהה תהליך <span dir="ltr" class="eng-term">1</span> (<span dir="ltr" class="eng-term">router ospf 1</span>), והכרז לפרוטוקול על הרשת המחוברת <span dir="ltr" class="eng-term">192.168.1.0</span> באמצעות מסכת Wildcard <span dir="ltr" class="eng-term">0.0.0.255</span>, כשהיא משתייכת לאזור הליבה <span dir="ltr" class="eng-term">area 0</span>.`, 
                 steps: ["router ospf 1", "network 192.168.1.0 0.0.0.255 area 0"],
                 syntax: "router ospf 1\nnetwork 192.168.1.0 0.0.0.255 area 0",
-                purpose: "פרוטוקול OSPF מחשב באופן דינמי את המסלול הקצר והיעיל ביותר ברשת. שים לב שבמקום מסכת רשת רגילה משתמשים במסכת Wildcard (המשלמת ל-255) ובאזור הראשי (Area 0).",
+                purpose: `ניתוב דינמי עם OSPF (<span dir="ltr" class="eng-term">Open Shortest Path First</span>): בניגוד לניתוב סטטי, OSPF הוא פרוטוקול <span dir="ltr" class="eng-term">Link-State</span> שבו נתבים מחליפים ביניהם מידע על מצב הקישורים ובונים "מפת עולם" משותפת של הרשת, ואז מחשבים באופן עצמאי את המסלול הקצר ביותר לכל יעד לפי אלגוריתם דייקסטרה. מספר ה-<span dir="ltr" class="eng-term">Process ID</span> (כאן <span dir="ltr" class="eng-term">1</span>) הוא מקומי בלבד לנתב ואינו צריך להיות זהה בין נתבים שכנים. הפקודה <span dir="ltr" class="eng-term">network</span> אינה "מכריזה" במובן הרגיל אלא קובעת על אילו ממשקים בנתב יופעל OSPF - וכאן משתמשים ב-<span dir="ltr" class="eng-term">Wildcard Mask</span> (ההפך ממסכת רשת רגילה: 0=בדיקה מדויקת, 255=כל ערך מתקבל) ולא במסכת תת-רשת רגילה. הפרמטר <span dir="ltr" class="eng-term">area 0</span> (אזור הגבול/ה-Backbone) הוא חובה בכל תצורת OSPF - גם ברשת עם אזור בודד.`,
                 expectedPrompts: ["Router(config)#", "Router(config-router)#"],
                 nextPrompt: "Router(config-router)#",
-                reflection: "כל הכבוד! השלמת את כל 12 המשימות המורכבות ברמת מקצוענות מלאה!" 
+                reflection: "כל הכבוד! השלמת בהצלחה את כל משימות הסימולטור!" 
             }
         ];
 
@@ -341,8 +383,13 @@
 
         function switchTab(tabIdx) {
             activeTab = tabIdx;
-            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === tabIdx);
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach((btn, i) => {
+                if (i === tabIdx) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
             });
 
             const firstIdx = tasks.findIndex(t => t.tab === tabIdx);
@@ -360,9 +407,9 @@
             
             document.getElementById('level-display').innerText = currentTaskIdx + 1;
             document.getElementById('total-levels').innerText = tasks.length;
-            document.getElementById('mission-text').innerText = t.mission;
+            document.getElementById('mission-text').innerHTML = t.mission;
             document.getElementById('syntax-display').innerText = t.syntax;
-            document.getElementById('purpose-display').innerText = t.purpose;
+            document.getElementById('purpose-display').innerHTML = t.purpose;
             document.getElementById('tab-badge').innerText = t.tabName;
             document.getElementById('cli-prompt').innerText = activePrompt;
 
@@ -385,23 +432,19 @@
 
             const t = tasks[currentTaskIdx];
             
-            // הדפסת הפקודה שהוקלדה
             appendToTerminal(`${typedCmd}\n`);
             inputEl.value = '';
 
             const expectedCmd = t.steps[currentStepIdx];
 
-            // בדיקת התאמה לפקודה הצפויה בשלב הנוכחי
             if (typedCmd.toLowerCase() === expectedCmd.toLowerCase()) {
                 currentStepIdx++;
 
                 if (currentStepIdx < t.steps.length) {
-                    // יש עוד שלבים במשימה הזו
                     let nextPrompt = t.expectedPrompts[currentStepIdx] || t.nextPrompt;
                     document.getElementById('cli-prompt').innerText = nextPrompt;
                     appendToTerminal(`% Command accepted. (Step ${currentStepIdx}/${t.steps.length} completed)\n\n${nextPrompt} `);
                 } else {
-                    // המשימה הושלמה במלואה!
                     document.getElementById('cli-prompt').innerText = t.nextPrompt;
                     document.getElementById('reflection-text').innerText = t.reflection;
                     document.getElementById('reflection-box').classList.remove('hidden');
@@ -424,7 +467,6 @@
                 }
 
             } else {
-                // שגיאת Cisco אופיינית
                 let currentPrompt = t.expectedPrompts[currentStepIdx] || t.nextPrompt;
                 appendToTerminal(`% Invalid input detected at '^' marker.\n\n${currentPrompt} `);
             }
@@ -433,6 +475,37 @@
         function resetTerminalConsole() {
             document.getElementById('terminal-screen').innerText = '';
             initTask();
+        }
+
+        /* מנגנון אזור מורה מוגן סיסמה */
+        function promptTeacherAuth() {
+            const pwd = prompt("אנא הזן סיסמת מורה לצפייה בתשובות:");
+            if (pwd === "sahar") {
+                const content = document.getElementById('teacherContent');
+                content.classList.remove('hidden');
+                renderTeacherAnswers();
+                document.getElementById('toggleTeacherBtn').classList.add('hidden');
+            } else if (pwd !== null) {
+                alert("סיסמה שגויה! הגישה נדחתה.");
+            }
+        }
+
+        function renderTeacherAnswers() {
+            const container = document.getElementById('answersContainer');
+            container.innerHTML = '';
+
+            tasks.forEach((t, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono";
+                card.innerHTML = `
+                    <div class="text-amber-400 font-bold mb-1">משימה ${index + 1}: ${t.tabName}</div>
+                    <div class="text-slate-300 font-sans text-xs mb-2">${t.mission}</div>
+                    <div class="bg-slate-900 p-2.5 rounded border border-slate-800 text-amber-300 terminal-container">
+                        <pre class="whitespace-pre-wrap">${t.syntax}</pre>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
         // האזנה למקש Enter
@@ -445,7 +518,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') lucide.createIcons();
 
-            // Modal עזרה
             const modal = document.getElementById('helpModal');
             const modalContent = document.getElementById('helpModalContent');
             const openBtn = document.getElementById('openHelpModalBtn');
