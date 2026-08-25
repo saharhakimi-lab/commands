@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght=300;400;600;800&family=Fira+Code:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght=300;400;600;800&family=Fira+Code:wght=400;500;700&display=swap');
         
         body {
             font-family: 'Heebo', sans-serif;
@@ -99,7 +99,7 @@
 
         <div class="text-left font-bold text-amber-300 bg-red-950/60 px-4 py-2 rounded-xl border border-red-800 shadow-inner">
             <div class="text-xs text-red-300">התקדמות במסלול</div>
-            משימה <span id="level-display" class="text-lg text-amber-400">1</span> / <span id="total-levels">11</span>
+            משימה <span id="level-display" class="text-lg text-amber-400">1</span> / <span id="total-levels">13</span>
         </div>
     </header>
 
@@ -111,12 +111,13 @@
             <button onclick="switchTab(2)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">3. ממשק SVI ושער ברירת מחדל</button>
             <button onclick="switchTab(3)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">4. VLANs, Access ו-Trunk</button>
             <button onclick="switchTab(4)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all">5. ניתוב סטטי ו-OSPF</button>
+            <button onclick="switchTab(5)" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold border border-red-800 text-red-200 transition-all bg-amber-900/40 text-amber-200 border-amber-600">6. ניהול מרחוק מאובטח SSH</button>
         </div>
     </nav>
 
     <main class="flex-grow p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto w-full relative z-10">
         
-        <!-- עמודה ימנית: תיאור המשימה, Syntax ומטרת הפקודה -->
+        <!-- עמודה ימנית: תיאור המשימה, Syntax, הסבר ויזואלי ומטרת הפקודה -->
         <div class="flex flex-col gap-5">
             
             <!-- תיאור המשימה הפעילה -->
@@ -131,6 +132,21 @@
                 <p id="mission-text" class="text-base md:text-lg leading-relaxed text-slate-900 font-semibold">
                     טוען משימה...
                 </p>
+            </div>
+
+            <!-- חלונית דידקטית ויזואלית (מוצגת רק בטאב SSH) -->
+            <div id="ssh-visual-card" class="bg-amber-50 rounded-xl p-5 shadow border-2 border-amber-400 hidden">
+                <h3 class="text-base font-extrabold text-amber-950 mb-3 flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-amber-700"></i>
+                    הבדלי אבטחה: SSH (מוצפן) מול Telnet (טקסט גלוי)
+                </h3>
+                <div class="mb-3 rounded-lg overflow-hidden border border-amber-300 shadow-sm bg-slate-950">
+                    <img src="https://lh3.googleusercontent.com/d/1n8phYLCt9k9ypNbGarWbX90LLf56EBhI" alt="Telnet vs SSH Security Diagram" class="w-full object-contain max-h-64">
+                </div>
+                <div class="text-xs md:text-sm text-slate-800 leading-relaxed font-medium space-y-1.5">
+                    <p><strong class="text-red-700">Telnet:</strong> מעביר סיסמאות ופקודות בטקסט גלוי (<span dir="ltr" class="eng-term">Plaintext</span>). כל מצותת ברשת (למשל עם Wireshark) רואה את הסיסמה המקורית <code class="bg-red-100 text-red-900 px-1 rounded">cisco123</code>.</p>
+                    <p><strong class="text-emerald-700">SSH:</strong> מעביר את התקשורת בתוך מנהרה מוצפנת. התוקף רואה אך ורק תוכן מוצפן ובלתי קריא (<code class="bg-slate-200 text-slate-800 px-1 rounded">8f#kL!9$m</code>).</p>
+                </div>
             </div>
 
             <!-- חלונית 1: Syntax של הפקודה -->
@@ -268,7 +284,6 @@
     </div>
 
     <script>
-        /* מערך משימות מעודכן לסנכרון 100% מלא בין המשימה, ה-Syntax ואזור המורה */
         const tasks = [
             // טאב 1: תצורת בסיס, באנר והצפנה
             { 
@@ -276,7 +291,7 @@
                 mission: `התחבר למתג במצב הבסיסי, עלה דרגה למצב הרשאות מלאות, היכנס למצב תצורה גלובלית, ושנה את שם המתג מברירת המחדל ל-<span dir="ltr" class="eng-term">SW-Core</span> כדי שיזוהה בבירור ברשת.`, 
                 steps: ["enable", "configure terminal", "hostname SW-Core"],
                 syntax: "enable\nconfigure terminal\nhostname SW-Core",
-                purpose: `מדרג ההרשאות ב-IOS: הפקודה <span dir="ltr" class="eng-term">enable</span> מעלה אותנו מ-<span dir="ltr" class="eng-term">User EXEC Mode</span> (סימן <span dir="ltr" class="eng-term">&gt;</span>, גישה לצפייה בלבד) ל-<span dir="ltr" class="eng-term">Privileged EXEC Mode</span> (סימן <span dir="ltr" class="eng-term">#</span>), שם מותרות פקודות ניהול ואבחון. משם, <span dir="ltr" class="eng-term">configure terminal</span> פותח את <span dir="ltr" class="eng-term">Global Configuration Mode</span> - הרמה שבה משנים את התצורה הכללית של המכשיר. הפקודה <span dir="ltr" class="eng-term">hostname</span> קובעת שם ייחודי למתג, מה שחיוני בסביבת ניהול עם ריבוי רכיבים: זה מה שמופיע בפרומפט, בלוגים ובכלי ניטור, ומונע בלבול בין מכשירים בזמן פתרון תקלות.`,
+                purpose: `מדרג ההרשאות ב-IOS: הפקודה <span dir="ltr" class="eng-term">enable</span> מעלה אותנו מ-<span dir="ltr" class="eng-term">User EXEC Mode</span> ל-<span dir="ltr" class="eng-term">Privileged EXEC Mode</span>. משם <span dir="ltr" class="eng-term">configure terminal</span> פותח את <span dir="ltr" class="eng-term">Global Configuration Mode</span>. הפקודה <span dir="ltr" class="eng-term">hostname</span> קובעת שם ייחודי למתג.`,
                 expectedPrompts: ["Switch>", "Switch#", "Switch(config)#"],
                 nextPrompt: "SW-Core(config)#",
                 reflection: "מעולה! המתג קיבל את שמו החדש." 
@@ -286,7 +301,7 @@
                 mission: `בעודך במצב תצורה גלובלית, הגדר הודעת אזהרה לכל מי שמתחבר למתג באמצעות באנר יומי (<span dir="ltr" class="eng-term">MOTD</span>) עם התוחם <span dir="ltr" class="eng-term">#Authorized_Only#</span>, ולאחר מכן הפעל מנגנון להצפנת כל הסיסמאות המאוחסנות בקובץ התצורה.`, 
                 steps: ["banner motd #Authorized_Only#", "service password-encryption"],
                 syntax: "banner motd #Authorized_Only#\nservice password-encryption",
-                purpose: `אבטחה משפטית וטכנית משולבת: <span dir="ltr" class="eng-term">banner motd</span> (Message Of The Day) מציגה הודעה לכל משתמש עוד לפני שהתחבר בהצלחה - שימוש נפוץ הוא אזהרה משפטית "לשימוש מורשים בלבד" שמרתיעה גישה לא חוקית ומשמשת גיבוי משפטי במקרה תקיפה. שים לב שהתו התוחם (כאן <span dir="ltr" class="eng-term">#</span>) יכול להיות כל תו שלא מופיע בטקסט ההודעה עצמה. בנוסף, <span dir="ltr" class="eng-term">service password-encryption</span> הופכת סיסמאות מסוג <span dir="ltr" class="eng-term">Type 0</span> (טקסט גלוי בקובץ התצורה) לסיסמאות מוצפנות מסוג <span dir="ltr" class="eng-term">Type 7</span> - הצפנה חלשה יחסית אך מונעת קריאה מיידית "מעבר לכתף" של הסיסמה בעת הצגת קובץ ה-<span dir="ltr" class="eng-term">running-config</span>.`,
+                purpose: `אבטחה משפטית וטכנית משולבת: <span dir="ltr" class="eng-term">banner motd</span> מציגה הודעת אזהרה לפני התחברות. הפקודה <span dir="ltr" class="eng-term">service password-encryption</span> הופכת סיסמאות בטקסט גלוי לסיסמאות מוצפנות מסוג Type 7.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config)#"],
                 nextPrompt: "SW-Core(config)#",
                 reflection: "באנר האזהרה ומנגנון הצפנת הסיסמאות הופעלו בהצלחה!" 
@@ -298,7 +313,7 @@
                 mission: `הגדר סיסמה מוצפנת לכניסה למצב הרשאות מלאות באמצעות <span dir="ltr" class="eng-term">enable secret cisco123</span>. לאחר מכן היכנס להגדרות קו הקונסולה (<span dir="ltr" class="eng-term">line con 0</span>), קבע את הסיסמה <span dir="ltr" class="eng-term">adminpass</span>, הפעל דרישת סיסמה בפועל עם <span dir="ltr" class="eng-term">login</span>, וצא בחזרה למצב תצורה גלובלית.`, 
                 steps: ["enable secret cisco123", "line con 0", "password adminpass", "login", "exit"],
                 syntax: "enable secret cisco123\nline con 0\npassword adminpass\nlogin\nexit",
-                purpose: `שכבות הגנה משלימות: <span dir="ltr" class="eng-term">enable secret</span> מוצפנת תמיד (אלגוריתם MD5), בניגוד ל-<span dir="ltr" class="eng-term">enable password</span> הישנה - וכאשר שתיהן מוגדרות, ה-IOS תמיד יעדיף את ה-<span dir="ltr" class="eng-term">secret</span>. הפקודה <span dir="ltr" class="eng-term">line con 0</span> נכנסת למצב תצורת קו (<span dir="ltr" class="eng-term">config-line</span>) עבור יציאת הקונסולה הפיזית - החיבור הראשוני שדרכו מגדירים מכשיר "מהיציאה" בלי צורך ברשת. חשוב להבין שהפקודה <span dir="ltr" class="eng-term">password</span> בלבד רק מגדירה סיסמה, ורק <span dir="ltr" class="eng-term">login</span> בפועל אוכפת את הדרישה להזין אותה - שכחת <span dir="ltr" class="eng-term">login</span> היא טעות נפוצה שמשאירה את הקו פתוח לגמרי.`,
+                purpose: `שכבות הגנה משלימות: <span dir="ltr" class="eng-term">enable secret</span> מוצפנת באלגוריתם MD5. הפקודה <span dir="ltr" class="eng-term">line con 0</span> מגדירה את קו הקונסולה, ו-<span dir="ltr" class="eng-term">login</span> אוכפת את דרישת הזנת הסיסמה.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config)#", "SW-Core(config-line)#", "SW-Core(config-line)#", "SW-Core(config-line)#"],
                 nextPrompt: "SW-Core(config)#",
                 reflection: "הסיסמאות וקו הקונסולה מאובטחים!" 
@@ -308,7 +323,7 @@
                 mission: `היכנס לממשק <span dir="ltr" class="eng-term">FastEthernet0/1</span>, הגדר אותו כפורט גישה קבוע (<span dir="ltr" class="eng-term">access</span>), הפעל את מנגנון <span dir="ltr" class="eng-term">port-security</span>, הגבל את מספר כתובות ה-MAC המורשות לפורט זה לכתובת אחת בלבד, וקבע שהלימוד של הכתובת ייעשה אוטומטית ויישמר בקובץ התצורה (<span dir="ltr" class="eng-term">sticky</span>).`, 
                 steps: ["interface FastEthernet0/1", "switchport mode access", "switchport port-security", "switchport port-security maximum 1", "switchport port-security mac-address sticky"],
                 syntax: "interface FastEthernet0/1\nswitchport mode access\nswitchport port-security\nswitchport port-security maximum 1\nswitchport port-security mac-address sticky",
-                purpose: `אבטחת פורטים (<span dir="ltr" class="eng-term">Port Security</span>) בשכבה 2: לפני שאפשר להפעיל את המנגנון חובה להגדיר את הפורט כ-<span dir="ltr" class="eng-term">access</span> - אבטחת פורטים אינה נתמכת על פורטי <span dir="ltr" class="eng-term">trunk</span> כברירת מחדל. הפקודה <span dir="ltr" class="eng-term">switchport port-security maximum 1</span> קובעת תקרה למספר הכתובות שהפורט "יזכור" בו-זמנית; חריגה ממנה (למשל חיבור מתג נוסף במקום מחשב בודד) תפעיל תגובת הפרה (ברירת מחדל: <span dir="ltr" class="eng-term">shutdown</span> - כיבוי הפורט). המילה <span dir="ltr" class="eng-term">sticky</span> אומרת למתג ללמוד את כתובת ה-MAC הראשונה שהוא רואה בפועל בתעבורה החיה ולהוסיף אותה אוטומטית לקובץ התצורה כאילו הוקלדה ידנית - שילוב שנותן גם נוחות (אין צורך לדעת מראש את הכתובת) וגם קביעות (היא נשמרת גם אחרי אתחול, כל עוד שומרים את התצורה).`,
+                purpose: `אבטחת פורטים בשכבה 2: חובה להגדיר את הפורט כ-<span dir="ltr" class="eng-term">access</span> לפני הפעלת Port Security. המילה <span dir="ltr" class="eng-term">sticky</span> לומדת את כתובת ה-MAC הראשונה ושומרת אותה בקובץ התצורה.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#", "SW-Core(config-if)#", "SW-Core(config-if)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
                 reflection: "אבטחת הפורט (Port Security) הופעלה בצורה מושלמת!" 
@@ -317,20 +332,20 @@
             // טאב 3: ממשק SVI ושער ברירת מחדל
             { 
                 tab: 2, tabName: "3. ממשק SVI ושער ברירת מחדל", 
-                mission: `היכנס לממשק הווירטואלי <span dir="ltr" class="eng-term">interface vlan 1</span> (ממשק ה-<span dir="ltr" class="eng-term">SVI</span> של המתג), הגדר לו כתובת <span dir="ltr" class="eng-term">IP 192.168.1.2</span> עם מסכת רשת <span dir="ltr" class="eng-term">255.255.255.0</span>, ולבסוף הפעל את הממשק פיזית-לוגית עם <span dir="ltr" class="eng-term">no shutdown</span> כדי שיעבור למצב <span dir="ltr" class="eng-term">up/up</span>.`, 
+                mission: `היכנס לממשק הווירטואלי <span dir="ltr" class="eng-term">interface vlan 1</span> (ממשק ה-<span dir="ltr" class="eng-term">SVI</span> של המתג), הגדר לו כתובת <span dir="ltr" class="eng-term">IP 192.168.1.2</span> עם מסכת רשת <span dir="ltr" class="eng-term">255.255.255.0</span>, ולבסוף הפעל את הממשק פיזית-לוגית עם <span dir="ltr" class="eng-term">no shutdown</span>.`, 
                 steps: ["interface vlan 1", "ip address 192.168.1.2 255.255.255.0", "no shutdown"],
                 syntax: "interface vlan 1\nip address 192.168.1.2 255.255.255.0\nno shutdown",
-                purpose: `הגדרת SVI (<span dir="ltr" class="eng-term">Switch Virtual Interface</span>): מתג מסוג <span dir="ltr" class="eng-term">Layer 2</span> אינו זקוק לכתובת IP כדי להעביר תעבורה בין פורטים - אך כן זקוק לה כדי שמנהל הרשת יוכל לנהל אותו מרחוק (<span dir="ltr" class="eng-term">Telnet/SSH/Ping</span>). הפקודה <span dir="ltr" class="eng-term">interface vlan 1</span> נכנסת לממשק וירטואלי שאינו קיים פיזית אלא מייצג את ה-VLAN של הניהול. חשוב לזכור: בניגוד לפורטים פיזיים, ממשקי SVI נוצרים במצב <span dir="ltr" class="eng-term">shutdown</span> כברירת מחדל ברוב הדימויים, ולכן פקודת <span dir="ltr" class="eng-term">no shutdown</span> היא שלב קריטי שמתחילים רבים שוכחים - בלעדיה הממשק יישאר במצב <span dir="ltr" class="eng-term">administratively down</span> גם אם כל שאר ההגדרות תקינות.`,
+                purpose: `הגדרת SVI: מתג Layer 2 זקוק לכתובת IP כדי לאפשר ניהול מרחוק. הפקודה <span dir="ltr" class="eng-term">no shutdown</span> מדליקה את הממשק הווירטואלי.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
                 reflection: "ממשק ה-SVI מוגדר ופעיל!" 
             },
             { 
                 tab: 2, tabName: "3. ממשק SVI ושער ברירת מחדל", 
-                mission: `צא ממצב הגדרת הממשק בחזרה למצב תצורה גלובלית, ושם הגדר את שער ברירת המחדל של המתג (<span dir="ltr" class="eng-term">ip default-gateway</span>) לכתובת <span dir="ltr" class="eng-term">192.168.1.1</span> - כתובת הנתב שדרכו יוצאת תעבורת הניהול אל מחוץ לרשת המקומית.`, 
+                mission: `צא ממצב הגדרת הממשק בחזרה למצב תצורה גלובלית, ושם הגדר את שער ברירת המחדל של המתג (<span dir="ltr" class="eng-term">ip default-gateway</span>) לכתובת <span dir="ltr" class="eng-term">192.168.1.1</span>.`, 
                 steps: ["exit", "ip default-gateway 192.168.1.1"],
                 syntax: "exit\nip default-gateway 192.168.1.1",
-                purpose: `הגדרת Default Gateway ברמת המתג: מתג Layer 2 אינו מבצע ניתוב בין רשתות - הוא רק "יודע" איך להגיע למכשירים בתוך רשת ה-VLAN המקומית שלו. כדי שהוא יוכל לתקשר עם תחנת ניהול שנמצאת ברשת אחרת (למשל מנהל שמתחבר מרחוק דרך אינטרנט או VPN), הוא צריך לדעת לאן לשלוח כל תעבורה שאינה מיועדת לרשת המקומית - זהו תפקידו של <span dir="ltr" class="eng-term">ip default-gateway</span>. שימו לב שזו פקודה גלובלית (ולא בתוך ממשק), ולכן חובה לצאת קודם מהגדרת ה-SVI עם <span dir="ltr" class="eng-term">exit</span>. פקודה זו רלוונטית רק במתגי Layer 2 טהורים; במתגי Layer 3 משתמשים בפקודת <span dir="ltr" class="eng-term">ip route</span> הרגילה במקום.`,
+                purpose: `הגדרת Default Gateway במתג מאפשרת לתעבורת הניהול של המתג לצאת מחוץ לרשת המקומית אל הנתב.`,
                 expectedPrompts: ["SW-Core(config-if)#", "SW-Core(config)#"],
                 nextPrompt: "SW-Core(config)#",
                 reflection: "שער ברירת המחדל הוגדר בהצלחה!" 
@@ -339,30 +354,30 @@
             // טאב 4: VLANs, Access ו-Trunk
             { 
                 tab: 3, tabName: "4. VLANs, Access ו-Trunk", 
-                mission: `צור רשת וירטואלית חדשה <span dir="ltr" class="eng-term">VLAN 10</span>, תן לה שם משמעותי - <span dir="ltr" class="eng-term">HR</span> - כדי שתזוהה בקלות בטבלת ה-VLANs, וצא חזרה למצב תצורה גלובלית.`, 
+                mission: `צור רשת וירטואלית חדשה <span dir="ltr" class="eng-term">VLAN 10</span>, תן לה שם משמעותי - <span dir="ltr" class="eng-term">HR</span> - וצא חזרה למצב תצורה גלובלית.`, 
                 steps: ["vlan 10", "name HR", "exit"],
                 syntax: "vlan 10\nname HR\nexit",
-                purpose: `יצירת VLAN (<span dir="ltr" class="eng-term">Virtual Local Area Network</span>): הפקודה <span dir="ltr" class="eng-term">vlan 10</span> יוצרת רשת לוגית חדשה ונכנסת למצב תצורת VLAN ייעודי (<span dir="ltr" class="eng-term">config-vlan</span>). חלוקה לרשתות וירטואליות מאפשרת להפריד מחלקות שונות (למשל HR, IT, כספים) לתוך אותו מתג פיזי בלי שהן "רואות" זו את זו - כל VLAN הוא מתחם שידור (<span dir="ltr" class="eng-term">Broadcast Domain</span>) נפרד, מה שגם משפר ביצועים (פחות רעש רשת) וגם מגביר אבטחה (מחלקה אחת לא יכולה לצותת לתעבורה של מחלקה אחרת ללא ניתוב מפורש). הפקודה <span dir="ltr" class="eng-term">name</span> אינה חובה טכנית - המספר לבדו מספיק לתפקוד - אך היא קריטית לניהול תקין וברור, במיוחד ברשתות עם עשרות VLANs.`,
+                purpose: `חלוקה לרשתות וירטואליות (VLANs) מפרידה מתחמי שידור, משפרת ביצועים ומגבירה אבטחה ברשת.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-vlan)#", "SW-Core(config-vlan)#"],
                 nextPrompt: "SW-Core(config)#",
                 reflection: "VLAN 10 הוגדר בשם HR בהצלחה!" 
             },
             { 
                 tab: 3, tabName: "4. VLANs, Access ו-Trunk", 
-                mission: `היכנס לממשק <span dir="ltr" class="eng-term">FastEthernet0/2</span>, קבע אותו במפורש כפורט גישה למחשב קצה (<span dir="ltr" class="eng-term">Access</span>), ושייך אותו לרשת הווירטואלית <span dir="ltr" class="eng-term">VLAN 10</span> שיצרת קודם.`, 
+                mission: `היכנס לממשק <span dir="ltr" class="eng-term">FastEthernet0/2</span>, קבע אותו כפורט גישה (<span dir="ltr" class="eng-term">Access</span>), ושייך אותו ל-<span dir="ltr" class="eng-term">VLAN 10</span>.`, 
                 steps: ["interface FastEthernet0/2", "switchport mode access", "switchport access vlan 10"],
                 syntax: "interface FastEthernet0/2\nswitchport mode access\nswitchport access vlan 10",
-                purpose: `שיוך פורט קצה ל-VLAN: פורט שמחובר ישירות למחשב, מדפסת או מצלמה (ולא למתג/נתב אחר) צריך להיות מוגדר כ-<span dir="ltr" class="eng-term">Access</span> - מצב שבו הפורט שייך ל-VLAN בודד ואינו מוסיף תגיות (<span dir="ltr" class="eng-term">tags</span>) לתעבורה, כי המכשיר בקצה לא יודע לפרש אותן. הפקודה <span dir="ltr" class="eng-term">switchport mode access</span> קובעת את סוג הפורט באופן מפורש (חשוב לציין זאת ולא לסמוך על ברירת המחדל, כדי למנוע פרצת אבטחה שנקראת <span dir="ltr" class="eng-term">VLAN Hopping</span>), ואילו <span dir="ltr" class="eng-term">switchport access vlan 10</span> מבצעת את השיוך בפועל - מרגע זה, כל מכשיר שיחובר לפורט הזה ייכנס אוטומטית לרשת הלוגית של HR ויקבל גישה רק למשאבים המשויכים ל-VLAN 10.`,
+                purpose: `פורט Access מיועד לחיבור מחשב קצה ומשויך ל-VLAN יחיד ללא תיוג מסגרות.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
                 reflection: "הפורט שוייך בהצלחה ל-VLAN 10!" 
             },
             { 
                 tab: 3, tabName: "4. VLANs, Access ו-Trunk", 
-                mission: `היכנס לממשק <span dir="ltr" class="eng-term">GigabitEthernet0/1</span>, המחובר למתג שכן נוסף, והגדר אותו כפורט מעבר עורקי (<span dir="ltr" class="eng-term">Trunk</span>) שמאפשר מעבר תעבורה של כמה VLANs יחד על גבי אותו קישור.`, 
+                mission: `היכנס לממשק <span dir="ltr" class="eng-term">GigabitEthernet0/1</span> והגדר אותו כפורט מעבר עורקי (<span dir="ltr" class="eng-term">Trunk</span>).`, 
                 steps: ["interface GigabitEthernet0/1", "switchport mode trunk"],
                 syntax: "interface GigabitEthernet0/1\nswitchport mode trunk",
-                purpose: `הגדרת Trunk ופרוטוקול 802.1Q: בניגוד לפורט Access שמשויך ל-VLAN בודד, פורט Trunk מיועד לקישורים שבין מתגים (או בין מתג לנתב/שרת וירטואליזציה), ועליו לשאת תעבורה השייכת למספר VLANs בו-זמנית על גבי כבל פיזי יחיד. כדי שהצד השני יידע לאיזה VLAN שייכת כל מסגרת, המתג "מתייג" (<span dir="ltr" class="eng-term">tags</span>) כל מסגרת בכותרת נוספת בתקן <span dir="ltr" class="eng-term">IEEE 802.1Q</span> לפני שליחתה על גבי ה-Trunk. בפועל, פקודת <span dir="ltr" class="eng-term">switchport mode trunk</span> היא זו שמפעילה את מנגנון התיוג הזה. חשוב לדעת: שני קצות הקישור חייבים להיות מוגדרים כ-Trunk (או להגיע להסכמה אוטומטית באמצעות DTP) אחרת התעבורה המתויגת תיפסל בצד השני.`,
+                purpose: `פורט Trunk מיועד לקישור בין מתגים ונושא תעבורה של מספר VLANs באמצעות תיוג 802.1Q.`,
                 expectedPrompts: ["SW-Core(config)#", "SW-Core(config-if)#"],
                 nextPrompt: "SW-Core(config-if)#",
                 reflection: "פורט העורק (Trunk) הוגדר בהצלחה!" 
@@ -371,23 +386,45 @@
             // טאב 5: ניתוב סטטי ו-OSPF
             { 
                 tab: 4, tabName: "5. ניתוב סטטי ו-OSPF", 
-                mission: `עבור למכשיר הנתב (<span dir="ltr" class="eng-term">Router</span>), עלה למצב הרשאות מלאות והיכנס לתצורה גלובלית. הגדר נתיב סטטי מפורש לרשת <span dir="ltr" class="eng-term">10.0.0.0/24</span> דרך הנתב השכן בכתובת <span dir="ltr" class="eng-term">192.168.1.1</span>, ולאחר מכן הגדר נתיב ברירת מחדל (<span dir="ltr" class="eng-term">0.0.0.0 0.0.0.0</span>) שיפנה כל תעבורה לא מוכרת אל ה-ISP בכתובת <span dir="ltr" class="eng-term">200.100.10.1</span>.`, 
+                mission: `עבור למכשיר הנתב (<span dir="ltr" class="eng-term">Router</span>). הגדר נתיב סטטי לרשת <span dir="ltr" class="eng-term">10.0.0.0/24</span> דרך <span dir="ltr" class="eng-term">192.168.1.1</span>, ונתיב ברירת מחדל (<span dir="ltr" class="eng-term">0.0.0.0 0.0.0.0</span>) אל <span dir="ltr" class="eng-term">200.100.10.1</span>.`, 
                 steps: ["enable", "configure terminal", "ip route 10.0.0.0 255.255.255.0 192.168.1.1", "ip route 0.0.0.0 0.0.0.0 200.100.10.1"],
                 syntax: "enable\nconfigure terminal\nip route 10.0.0.0 255.255.255.0 192.168.1.1\nip route 0.0.0.0 0.0.0.0 200.100.10.1",
-                purpose: `ניתוב סטטי (<span dir="ltr" class="eng-term">Static Routing</span>) וניתוב ברירת מחדל: פקודת <span dir="ltr" class="eng-term">ip route</span> מקבלת שלושה רכיבים - רשת היעד, מסכת הרשת שלה, וכתובת ה-<span dir="ltr" class="eng-term">Next Hop</span> (הנתב הבא בדרך). ניתוב סטטי מתאים לרשתות קטנות ויציבות כי הוא צורך אפס משאבי מעבד ומספק שליטה מלאה, אך אינו מגיב אוטומטית לשינויים ברשת. נתיב ברירת המחדל <span dir="ltr" class="eng-term">0.0.0.0 0.0.0.0</span> הוא מקרה פרטי מיוחד: הוא "תופס" כל כתובת יעד שאינה מופיעה בטבלת הניתוב באופן ספציפי יותר (ה-<span dir="ltr" class="eng-term">wildcard</span> הרחב ביותר האפשרי) ולכן משמש בדרך כלל כדי לשלוח את כל התעבורה שאינה פנימית אל ספק האינטרנט (<span dir="ltr" class="eng-term">ISP</span>) - שם ה-Cisco IOS מכנה אותה גם <span dir="ltr" class="eng-term">Gateway of Last Resort</span>.`,
+                purpose: `ניתוב סטטי קובע נתיב קבוע בטבלת הניתוב. נתיב ברירת מחדל (0.0.0.0/0) מנתב כל תעבורה לא מוכרת אל ספק האינטרנט.`,
                 expectedPrompts: ["Router>", "Router#", "Router(config)#", "Router(config)#"],
                 nextPrompt: "Router(config)#",
                 reflection: "הניתובים הסטטיים נרשמו בטבלת הניתובים!" 
             },
             { 
                 tab: 4, tabName: "5. ניתוב סטטי ו-OSPF", 
-                mission: `הפעל תהליך ניתוב דינמי מסוג <span dir="ltr" class="eng-term">OSPF</span> עם מזהה תהליך <span dir="ltr" class="eng-term">1</span> (<span dir="ltr" class="eng-term">router ospf 1</span>), והכרז לפרוטוקול על הרשת המחוברת <span dir="ltr" class="eng-term">192.168.1.0</span> באמצעות מסכת Wildcard <span dir="ltr" class="eng-term">0.0.0.255</span>, כשהיא משתייכת לאזור הליבה <span dir="ltr" class="eng-term">area 0</span>.`, 
+                mission: `הפעל תהליך OSPF עם Process ID <span dir="ltr" class="eng-term">1</span>, והכרז על הרשת <span dir="ltr" class="eng-term">192.168.1.0</span> עם Wildcard <span dir="ltr" class="eng-term">0.0.0.255</span> באזור <span dir="ltr" class="eng-term">area 0</span>.`, 
                 steps: ["router ospf 1", "network 192.168.1.0 0.0.0.255 area 0"],
                 syntax: "router ospf 1\nnetwork 192.168.1.0 0.0.0.255 area 0",
-                purpose: `ניתוב דינמי עם OSPF (<span dir="ltr" class="eng-term">Open Shortest Path First</span>): בניגוד לניתוב סטטי, OSPF הוא פרוטוקול <span dir="ltr" class="eng-term">Link-State</span> שבו נתבים מחליפים ביניהם מידע על מצב הקישורים ובונים "מפת עולם" משותפת של הרשת, ואז מחשבים באופן עצמאי את המסלול הקצר ביותר לכל יעד לפי אלגוריתם דייקסטרה. מספר ה-<span dir="ltr" class="eng-term">Process ID</span> (כאן <span dir="ltr" class="eng-term">1</span>) הוא מקומי בלבד לנתב ואינו צריך להיות זהה בין נתבים שכנים. הפקודה <span dir="ltr" class="eng-term">network</span> אינה "מכריזה" במובן הרגיל אלא קובעת על אילו ממשקים בנתב יופעל OSPF - וכאן משתמשים ב-<span dir="ltr" class="eng-term">Wildcard Mask</span> (ההפך ממסכת רשת רגילה: 0=בדיקה מדויקת, 255=כל ערך מתקבל) ולא במסכת תת-רשת רגילה. הפרמטר <span dir="ltr" class="eng-term">area 0</span> (אזור הגבול/ה-Backbone) הוא חובה בכל תצורת OSPF - גם ברשת עם אזור בודד.`,
+                purpose: `פרוטוקול OSPF מחליף מידע על קישורים ומחשב מסלול קצר ביותר. פקודת network משתמשת ב-Wildcard Mask להפעלת הפרוטוקול בממשק.`,
                 expectedPrompts: ["Router(config)#", "Router(config-router)#"],
                 nextPrompt: "Router(config-router)#",
-                reflection: "כל הכבוד! השלמת בהצלחה את כל משימות הסימולטור!" 
+                reflection: "כל הכבוד! הגדרת את OSPF בהצלחה!" 
+            },
+
+            // טאב 6: ניהול מרחוק מאובטח SSH
+            { 
+                tab: 5, tabName: "6. ניהול מרחוק מאובטח SSH", 
+                mission: `הגדר שם מתחם רשת (<span dir="ltr" class="eng-term">ip domain-name school.local</span>), צור משתמש מקומי (<span dir="ltr" class="eng-term">username admin secret admin123</span>), ומחולל מפתח הצפנה מסוג RSA באורך 1024 ביט (<span dir="ltr" class="eng-term">crypto key generate rsa</span> - הזן <span dir="ltr" class="eng-term">1024</span> בלחיצה).`, 
+                steps: ["ip domain-name school.local", "username admin secret admin123", "crypto key generate rsa", "1024"],
+                syntax: "ip domain-name school.local\nusername admin secret admin123\ncrypto key generate rsa\n1024",
+                purpose: `הכנת תשתית SSH: ליצירת מפתח RSA נדרש Domain Name ושם המכשיר (FQDN). יצירת משתמש מקומי מאפשרת אימות מאובטח בחיבור SSH.`,
+                expectedPrompts: ["SW-Core(config)#", "SW-Core(config)#", "SW-Core(config)#", "How many bits in the modulus [512]:"],
+                nextPrompt: "SW-Core(config)#",
+                reflection: "מפתחות ההצפנה והמשתמש המקומי הוגדרו בהצלחה!" 
+            },
+            { 
+                tab: 5, tabName: "6. ניהול מרחוק מאובטח SSH", 
+                mission: `קבע שימוש בגרסה המאובטחת <span dir="ltr" class="eng-term">ip ssh version 2</span>. היכנס לתצורת קווי ה-VTY (<span dir="ltr" class="eng-term">line vty 0 15</span>), הגדר אימות מקומי (<span dir="ltr" class="eng-term">login local</span>), והגבל את הגישה ל-SSH בלבד (<span dir="ltr" class="eng-term">transport input ssh</span>).`, 
+                steps: ["ip ssh version 2", "line vty 0 15", "login local", "transport input ssh"],
+                syntax: "ip ssh version 2\nline vty 0 15\nlogin local\ntransport input ssh",
+                purpose: `אכיפת SSH: <span dir="ltr" class="eng-term">transport input ssh</span> חוסמת Telnet כליל. בניגוד ל-Telnet המעביר מידע בטקסט גלוי, SSH מעביר את כל התקשורת במנהרה מוצפנת ומאובטחת.`,
+                expectedPrompts: ["SW-Core(config)#", "SW-Core(config)#", "SW-Core(config-line)#", "SW-Core(config-line)#"],
+                nextPrompt: "SW-Core(config-line)#",
+                reflection: "אבטחת SSH מלאה הוחלה על כל קווי ה-VTY! כעת Telnet חסום והתקשורת מוצפנת!" 
             }
         ];
 
@@ -405,6 +442,14 @@
                     btn.classList.remove('active');
                 }
             });
+
+            // הצגת חלונית ההסבר הויזואלית רק בטאב 5 (SSH)
+            const visualCard = document.getElementById('ssh-visual-card');
+            if (tabIdx === 5) {
+                visualCard.classList.remove('hidden');
+            } else {
+                visualCard.classList.add('hidden');
+            }
 
             const firstIdx = tasks.findIndex(t => t.tab === tabIdx);
             if (firstIdx !== -1) {
@@ -491,7 +536,6 @@
             initTask();
         }
 
-        /* מנגנון אזור מורה מוגן סיסמה */
         function promptTeacherAuth() {
             const pwd = prompt("אנא הזן סיסמת מורה לצפייה בתשובות:");
             if (pwd === "sahar") {
@@ -522,7 +566,6 @@
             });
         }
 
-        // האזנה למקש Enter
         document.getElementById('cli-input').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 handleCommandSubmit();
