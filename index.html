@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מאסטר Cisco Packet Tracer - סימולטור CLI מותאם</title>
+    <title>מתרגלים עם סהר פקודות להגדרת רכיבי תקשורת</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -24,6 +24,20 @@
 
         .crazy-avatar {
             box-shadow: 0 0 15px #f59e0b, 0 0 30px #ef4444;
+        }
+
+        /* אנימציית סיבוב לאוואטר (10 שניות, רציף) */
+        .spin-avatar {
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .tab-btn {
@@ -70,14 +84,14 @@
     <header class="bg-red-900 text-amber-50 p-4 md:p-5 shadow-xl flex justify-between items-center relative z-20 border-b-4 border-amber-500">
         <div class="flex items-center gap-4">
             <div class="relative group">
-                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-amber-400 overflow-hidden bg-slate-950 crazy-avatar animate-pulse flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-amber-400 overflow-hidden bg-slate-950 crazy-avatar spin-avatar flex-shrink-0 transition-transform duration-300">
                     <img src="https://lh3.googleusercontent.com/d/1BHxytxfATgrv3wpk_8slqpRX08p2Dzml" alt="Grand Master Avatar" class="w-full h-full object-cover">
                 </div>
             </div>
             
             <div>
                 <h1 class="text-xl md:text-2xl font-black flex items-center gap-2">
-                    מאסטר <span class="eng-term text-amber-300 bg-red-950">Cisco Packet Tracer</span> - הדרכה אינטראקטיבית
+                    מתרגלים עם סהר פקודות להגדרת רכיבי תקשורת
                 </h1>
                 <p class="text-xs md:text-sm text-red-200 mt-0.5">סימולטור <span dir="ltr" class="terminal-font">CLI</span> מורחב - תרגול רצפים מלאים בדיוק כמו בבחינה</p>
             </div>
